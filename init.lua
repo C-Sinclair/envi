@@ -10,5 +10,8 @@ require "envi.core.globals"
 require "envi.lsp"
 
 -- load the theme
-require("catppuccin").setup()
+local theme_present, theme = pcall(require, "catppuccin")
+if theme_present then
+  theme.setup()
+end
 vim.cmd [[colorscheme catppuccin]]

@@ -234,4 +234,13 @@ return require("packer").startup(function(use)
     "catppuccin/nvim",
     as = "catppuccin",
   }
+
+  -- status line
+  use {
+    "nvim-lualine/lualine.nvim",
+    after = "catppuccin",
+    config = function()
+      require("envi.plugins.lualine").setup()
+    end,
+  }
 end)
