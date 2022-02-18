@@ -11,7 +11,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	})
 end
 
-require('packer').startup(function(use)
+vim.cmd [[packadd packer.nvim]]
+
+return require('packer').startup(function(use)
 	-- run tasks etc
 	use('nvim-lua/plenary.nvim')
 
@@ -220,9 +222,15 @@ require('packer').startup(function(use)
 	use({
 		'luukvbaal/nnn.nvim',
 		config = function()
-			require('custom.plugins.nnn').setup()
+			require('envi.plugins.nnn').setup()
 		end,
 	})
+
+    -- theme 
+    use({
+      "catppuccin/nvim",
+      as = "catppuccin",
+    })
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins

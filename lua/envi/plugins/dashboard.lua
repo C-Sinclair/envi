@@ -1,9 +1,7 @@
-local g = vim.g
-
-g.dashboard_disable_at_vimenter = 0
-g.dashboard_disable_statusline = 1
-g.dashboard_default_executive = 'telescope'
-g.dashboard_custom_header = {
+vim.g.dashboard_disable_at_vimenter = 0
+vim.g.dashboard_disable_statusline = 1
+vim.g.dashboard_default_executive = 'telescope'
+vim.g.dashboard_custom_header = {
 	[[                                                   /]],
 	[[                                                 .7 ]],
 	[[                                      \       , //  ]],
@@ -45,7 +43,7 @@ g.dashboard_custom_header = {
 	[[         `-.___/   schweeeeeeeeeeeeeeeeeeeeeeee     ]],
 }
 
-g.dashboard_custom_section = {
+vim.g.dashboard_custom_section = {
 	a = { description = { '  Find File                 Ctrl p' }, command = 'Telescope find_files' },
 	b = { description = { '  Recents                         ' }, command = 'Telescope oldfiles' },
 	c = { description = { '  Find Word                 Ctrl f' }, command = 'Telescope live_grep' },
@@ -53,6 +51,12 @@ g.dashboard_custom_section = {
 	e = { description = { '  Marks              Ctrl G Ctrl G' }, command = 'Telescope harpoon marks' },
 }
 
-g.dashboard_custom_footer = {
+vim.g.dashboard_custom_footer = {
 	'   ',
 }
+
+local M = {}
+
+M.setup = function() end
+
+return M

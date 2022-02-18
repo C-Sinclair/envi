@@ -4,140 +4,142 @@ if not present then
 	return
 end
 
+local colours = require('catppuccin.api.colors').get_colors()
+
 local config = {
 	c = {
 		icon = '',
-		color = default.colors.blue,
+		color = colours.blue,
 		name = 'c',
 	},
 	css = {
 		icon = '',
-		color = default.colors.blue,
+		color = colours.blue,
 		name = 'css',
 	},
 	deb = {
 		icon = '',
-		color = default.colors.cyan,
+		color = colours.cyan,
 		name = 'deb',
 	},
 	Dockerfile = {
 		icon = '',
-		color = default.colors.cyan,
+		color = colours.cyan,
 		name = 'Dockerfile',
 	},
 	html = {
 		icon = '',
-		color = default.colors.baby_pink,
+		color = colours.baby_pink,
 		name = 'html',
 	},
 	jpeg = {
 		icon = '',
-		color = default.colors.dark_purple,
+		color = colours.dark_purple,
 		name = 'jpeg',
 	},
 	jpg = {
 		icon = '',
-		color = default.colors.dark_purple,
+		color = colours.dark_purple,
 		name = 'jpg',
 	},
 	js = {
 		icon = '',
-		color = default.colors.sun,
+		color = colours.sun,
 		name = 'js',
 	},
 	kt = {
 		icon = '󱈙',
-		color = default.colors.orange,
+		color = colours.orange,
 		name = 'kt',
 	},
 	lock = {
 		icon = '',
-		color = default.colors.red,
+		color = colours.red,
 		name = 'lock',
 	},
 	lua = {
 		icon = '',
-		color = default.colors.blue,
+		color = colours.blue,
 		name = 'lua',
 	},
 	mp3 = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'mp3',
 	},
 	mp4 = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'mp4',
 	},
 	out = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'out',
 	},
 	png = {
 		icon = '',
-		color = default.colors.dark_purple,
+		color = colours.dark_purple,
 		name = 'png',
 	},
 	py = {
 		icon = '',
-		color = default.colors.cyan,
+		color = colours.cyan,
 		name = 'py',
 	},
 	['robots.txt'] = {
 		icon = 'ﮧ',
-		color = default.colors.red,
+		color = colours.red,
 		name = 'robots',
 	},
 	toml = {
 		icon = '',
-		color = default.colors.blue,
+		color = colours.blue,
 		name = 'toml',
 	},
 	ts = {
 		icon = 'ﯤ',
-		color = default.colors.teal,
+		color = colours.teal,
 		name = 'ts',
 	},
 	ttf = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'TrueTypeFont',
 	},
 	rb = {
 		icon = '',
-		color = default.colors.pink,
+		color = colours.pink,
 		name = 'rb',
 	},
 	rpm = {
 		icon = '',
-		color = default.colors.orange,
+		color = colours.orange,
 		name = 'rpm',
 	},
 	vue = {
 		icon = '﵂',
-		color = default.colors.vibrant_green,
+		color = colours.vibrant_green,
 		name = 'vue',
 	},
 	woff = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'WebOpenFontFormat',
 	},
 	woff2 = {
 		icon = '',
-		color = default.colors.white,
+		color = colours.white,
 		name = 'WebOpenFontFormat2',
 	},
 	xz = {
 		icon = '',
-		color = default.colors.sun,
+		color = colours.sun,
 		name = 'xz',
 	},
 	zip = {
 		icon = '',
-		color = default.colors.sun,
+		color = colours.sun,
 		name = 'zip',
 	},
 }
