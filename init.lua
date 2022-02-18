@@ -1,12 +1,14 @@
 -- start by loading all the plugins
-require('envi.plugins')
+require "envi.plugins"
 
 -- then load the core overwrites to nvim functionality
-require('envi.core')
-require('envi.core.mappings')
-require('envi.core.globals')
+require "envi.core"
+require "envi.core.mappings"
+require "envi.core.globals"
 
--- load the theme 
-require('catppuccin').setup()
-vim.cmd[[colorscheme catppuccin]]
+-- load lsp specific functionality
+require "envi.lsp"
 
+-- load the theme
+require("catppuccin").setup()
+vim.cmd [[colorscheme catppuccin]]
