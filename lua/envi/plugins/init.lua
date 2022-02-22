@@ -65,6 +65,24 @@ return require("packer").startup(function(use)
     end,
   }
 
+  -- extends Treesitter with more objects
+  use {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    after = "nvim-treesitter",
+  }
+
+  -- view the treesitter AST
+  use {
+    "nvim-treesitter/playground",
+    after = "nvim-treesitter",
+  }
+
+  -- rainbow brackets etc
+  use {
+    "p00f/nvim-ts-rainbow",
+    after = "nvim-treesitter",
+  }
+
   -- git stuff
   use {
     "lewis6991/gitsigns.nvim",
@@ -151,8 +169,26 @@ return require("packer").startup(function(use)
   -- automatically close brackets
   use {
     "windwp/nvim-autopairs",
+    after = "nvim-treesitter",
     config = function()
       require("envi.plugins.autopairs").setup()
+    end,
+  }
+
+  -- auto close/rename jsx tags
+  use {
+    "windwp/nvim-ts-autotag",
+    after = "nvim-treesitter",
+    config = function()
+      require("nvim-ts-autotag").setup {
+        "html",
+        "javascript",
+        "javascriptreact",
+        "typescriptreact",
+        "svelte",
+        "vue",
+        "rescript",
+      }
     end,
   }
 
@@ -172,6 +208,12 @@ return require("packer").startup(function(use)
     config = function()
       require("envi.plugins.comment").setup()
     end,
+  }
+
+  -- better typescript commenting
+  use {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    after = { "nvim-treesitter", "Comment.nvim" },
   }
 
   -- popup fuzzy searching
@@ -219,7 +261,14 @@ return require("packer").startup(function(use)
   }
 
   -- interactive LISPs and such
-  -- use({ 'Olical/conjure' })
+  use {
+    "Olical/conjure",
+    config = function()
+      require("envi.plugins.conjure").setup()
+    end,
+  }
+
+  use "tpope/vim-sexp-mappings-for-regular-people"
 
   -- file explorer
   use {
@@ -241,6 +290,56 @@ return require("packer").startup(function(use)
     after = "catppuccin",
     config = function()
       require("envi.plugins.lualine").setup()
+    end,
+  }
+
+  -- symbols tree viewer
+  use {
+    "simrat39/symbols-outline.nvim",
+    after = "nvim-treesitter",
+    config = function()
+      require("envi.plugins.symbols").setup()
+    end,
+  }
+
+  -- todo comments
+  use {
+    "folke/todo-comments.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup {
+        vim.keymap.set("n", "<leader>td", "<cmd>TodoTelescope<cr>"),
+      }
+    end,
+  }
+
+  -- git diff
+  use {
+    "sindrets/diffview.nvim",
+    requires = "nvim-lua/plenary.nvim",
+  }
+
+  -- github integration
+  use {
+    "pwntester/octo.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "kyazdani42/nvim-web-devicons",
+    },
+    config = function()
+      require("octo").setup()
+    end,
+  }
+
+  -- git viewer
+  use {
+    "TimUntersberger/neogit",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      local neogit = require "neogit"
+      neogit.setup()
+      vim.keymap.set("n", "<leader>gg", neogit.open)
     end,
   }
 end)

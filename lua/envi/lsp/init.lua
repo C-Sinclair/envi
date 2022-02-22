@@ -14,14 +14,25 @@ vim.diagnostic.config {
   },
   signs = true,
   underline = true,
-  update_in_insert = false,
+  update_in_insert = true,
 }
 
+-- borders
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = "single",
 })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
   border = "single",
+})
+
+-- enable update jsx tags on insert
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  underline = true,
+  virtual_text = {
+    spacing = 5,
+    severity_limit = "Warning",
+  },
+  update_in_insert = true,
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -58,7 +69,7 @@ local function on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "pyright", "tsserver" }
+local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -104,21 +115,21 @@ end)
 vim.keymap.set("n", "K", function()
   vim.lsp.buf.hover()
 end)
-vim.keymap.set("n", "gR", function()
+vim.keymap.set("n", "<leader>lR", function()
   vim.lsp.buf.rename()
 end)
-vim.keymap.set("n", "gr", function()
+vim.keymap.set("n", "<leader>lr", function()
   vim.lsp.buf.references()
 end)
-vim.keymap.set("n", "gC", function()
+vim.keymap.set("n", "<leader>lc", function()
   vim.lsp.buf.code_action()
 end)
-vim.keymap.set("n", "gS", function()
+vim.keymap.set("n", "<leader>ls", function()
   vim.lsp.buf.signature_help()
 end)
 
--- Open Diagnostics
-vim.keymap.set("n", "ge", function()
+-- Open iagnostics
+vim.keymap.set("n", "<leader>de", function()
   vim.diagnostic.open_float()
 end)
 vim.keymap.set("n", "<leader>dd", function()
