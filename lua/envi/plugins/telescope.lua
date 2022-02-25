@@ -57,7 +57,7 @@ local M = {}
 M.setup = function()
   telescope.setup(config)
 
-  local extensions = { "emoji" }
+  local extensions = { "emoji", "node_modules" }
 
   pcall(function()
     for _, ext in ipairs(extensions) do

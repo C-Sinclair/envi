@@ -220,15 +220,23 @@ return require("packer").startup(function(use)
   use {
     "nvim-telescope/telescope.nvim",
     module = "telescope",
+    requires = {
+      "nvim-telescope/telescope-node-modules.nvim",
+      "xiyaowong/telescope-emoji.nvim",
+    },
     config = function()
       require("envi.plugins.telescope").setup()
     end,
   }
 
+  -- search node_modules
+  use {
+    "nvim-telescope/telescope-node-modules.nvim",
+  }
+
   -- search emojis
   use {
     "xiyaowong/telescope-emoji.nvim",
-    after = "telescope",
   }
 
   -- time tracking
