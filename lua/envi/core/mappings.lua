@@ -16,3 +16,11 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 
 -- close the current buffer
 vim.keymap.set("n", "<leader>x", "<cmd>bd<cr>")
+
+--[[
+Git Worktrees 
+--]]
+
+vim.keymap.set("n", "<leader>gw", function()
+  require("envi.worktrees").worktrees()
+end)

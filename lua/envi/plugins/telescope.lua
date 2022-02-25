@@ -38,11 +38,11 @@ local config = {
     file_ignore_patterns = { "node_modules" },
     generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
     path_display = { "truncate" },
-    winblend = 0,
-    border = {},
-    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+    -- winblend = 0,
+    -- border = {},
+    -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     color_devicons = true,
-    use_less = true,
+    -- use_less = true,
     set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
     file_previewer = require("telescope.previewers").vim_buffer_cat.new,
     grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
@@ -57,7 +57,7 @@ local M = {}
 M.setup = function()
   telescope.setup(config)
 
-  local extensions = { "themes", "terms" }
+  local extensions = { "emoji" }
 
   pcall(function()
     for _, ext in ipairs(extensions) do
@@ -71,7 +71,7 @@ M.setup = function()
 
   -- show project files
   vim.keymap.set("n", "<C-p>", function()
-    require("telescope.builtin").git_files()
+    require("telescope.builtin").find_files()
   end)
 
   -- search by characters
@@ -87,6 +87,16 @@ M.setup = function()
   -- reopen last search
   vim.keymap.set("n", "<C-t><C-t>", function()
     require("telescope.builtin").resume()
+  end)
+
+  -- show git worktrees
+  vim.keymap.set("n", "<leader>gb", function()
+    require("telescope").extensions.git_worktree.git_worktrees()
+  end)
+
+  -- create new worktree branch
+  vim.keymap.set("n", "<leader>gn", function()
+    require("telescope").extensions.git_worktree.create_git_worktree()
   end)
 end
 

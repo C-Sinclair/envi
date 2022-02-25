@@ -48,7 +48,6 @@ vim.g.dashboard_custom_section = {
   b = { description = { "  Recents                         " }, command = "Telescope oldfiles" },
   c = { description = { "  Find Word                 Ctrl f" }, command = "Telescope live_grep" },
   d = { description = { "洛 New File                        " }, command = "DashboardNewFile" },
-  e = { description = { "  Marks              Ctrl G Ctrl G" }, command = "Telescope harpoon marks" },
 }
 
 vim.g.dashboard_custom_footer = {

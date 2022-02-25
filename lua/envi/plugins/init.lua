@@ -225,6 +225,12 @@ return require("packer").startup(function(use)
     end,
   }
 
+  -- search emojis
+  use {
+    "xiyaowong/telescope-emoji.nvim",
+    after = "telescope",
+  }
+
   -- time tracking
   use { "wakatime/vim-wakatime" }
 
@@ -237,9 +243,6 @@ return require("packer").startup(function(use)
     end,
   }
 
-  -- better git organisation
-  use { "ThePrimeagen/git-worktree.nvim" }
-
   -- different way of marking files
   use {
     "ThePrimeagen/harpoon",
@@ -248,7 +251,6 @@ return require("packer").startup(function(use)
     },
     config = function()
       require("telescope").load_extension "harpoon"
-      require("envi.plugins.harpoon").setup()
     end,
   }
 
@@ -305,7 +307,7 @@ return require("packer").startup(function(use)
   -- todo comments
   use {
     "folke/todo-comments.nvim",
-    requires = "nvim-lua/plenary.nvim",
+    requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
     config = function()
       require("todo-comments").setup {
         vim.keymap.set("n", "<leader>td", "<cmd>TodoTelescope<cr>"),
@@ -338,8 +340,18 @@ return require("packer").startup(function(use)
     requires = "nvim-lua/plenary.nvim",
     config = function()
       local neogit = require "neogit"
-      neogit.setup()
+      neogit.setup {
+        integrations = {
+          diffview = true,
+        },
+      }
       vim.keymap.set("n", "<leader>gg", neogit.open)
     end,
   }
+
+  -- lua repl and evaluation
+  -- use {
+  --   "bfredl/nvim-luadev",
+  --   config = function() end,
+  -- }
 end)
