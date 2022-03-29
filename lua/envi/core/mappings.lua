@@ -17,6 +17,9 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 -- close the current buffer
 vim.keymap.set("n", "<leader>x", "<cmd>bd<cr>")
 
+-- close the quickfix list
+vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>")
+
 --[[
 Git Worktrees 
 --]]

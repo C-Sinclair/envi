@@ -69,7 +69,7 @@ local function on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp" }
+local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp", "gopls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -111,6 +111,9 @@ lspconfig.sumneko_lua.setup {
 
 vim.keymap.set("n", "gd", function()
   vim.lsp.buf.definition()
+end)
+vim.keymap.set("n", "gv", function()
+  require("telescope.builtin").lsp_definitions { jump_type = "vsplit" }
 end)
 vim.keymap.set("n", "K", function()
   vim.lsp.buf.hover()
