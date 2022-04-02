@@ -12,6 +12,10 @@ M.setup = function()
       session = "shared",
     },
     replace_netrw = "explorer",
+    auto_close = true,
+    mappings = {
+      { "<ESC>", require("nnn").builtin.close },
+    },
   }
 
   -- open at directory of current file
