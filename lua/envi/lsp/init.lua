@@ -69,7 +69,7 @@ local function on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp", "gopls" }
+local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp", "gopls", "tailwindcss" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {

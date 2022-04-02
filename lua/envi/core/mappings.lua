@@ -19,11 +19,3 @@ vim.keymap.set("n", "<leader>x", "<cmd>bd<cr>")
 
 -- close the quickfix list
 vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>")
-
---[[
-Git Worktrees 
---]]
-
-vim.keymap.set("n", "<leader>gw", function()
-  require("envi.worktrees").worktrees()
-end)

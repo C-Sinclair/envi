@@ -77,12 +77,6 @@ return require("packer").startup(function(use)
     after = "nvim-treesitter",
   }
 
-  -- rainbow brackets etc
-  use {
-    "p00f/nvim-ts-rainbow",
-    after = "nvim-treesitter",
-  }
-
   -- git stuff
   use {
     "lewis6991/gitsigns.nvim",
