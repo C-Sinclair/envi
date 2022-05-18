@@ -46,13 +46,7 @@ local config = {
       elseif require("luasnip").expand_or_jumpable() then
         require("luasnip").expand_or_jump()
       else
-        -- account for Copilot/Cmp showdown over Tab key
-        local copilot_keys = vim.fn["copilot#Accept"]()
-        if copilot_keys ~= "" then
-          vim.api.nvim_feedkeys(copilot_keys, "i", true)
-        else
-          fallback()
-        end
+        fallback()
       end
     end, {
       "i",
