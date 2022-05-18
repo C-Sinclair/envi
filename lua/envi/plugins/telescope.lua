@@ -3,6 +3,8 @@ if not present then
   return
 end
 
+local action_state = require "telescope.actions.state"
+
 local config = {
   defaults = {
     vimgrep_arguments = {
@@ -13,6 +15,7 @@ local config = {
       "--line-number",
       "--column",
       "--smart-case",
+      "--trim",
     },
     prompt_prefix = "   ",
     selection_caret = "  ",
@@ -71,7 +74,7 @@ M.setup = function()
 
   -- show project files
   vim.keymap.set("n", "<C-p>", function()
-    require("telescope.builtin").find_files()
+    require("telescope.builtin").find_files {}
   end)
 
   -- search by characters
@@ -81,7 +84,16 @@ M.setup = function()
 
   -- search open buffers
   vim.keymap.set("n", "<C-b>", function()
-    require("telescope.builtin").buffers()
+    require("telescope.builtin").buffers {
+      attach_mappings = function(prompt_bufnr, map)
+        map("i", "<C-R>", function()
+          local selection = action_state.get_selected_entry()
+          vim.api.nvim_command("bdelete " .. selection.bufnr)
+          action_state.get_current_picker(prompt_bufnr):refresh()
+        end)
+        return true
+      end,
+    }
   end)
 
   -- reopen last search

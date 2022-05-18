@@ -265,14 +265,14 @@ return require("packer").startup(function(use)
   }
 
   -- interactive LISPs and such
-  use {
-    "Olical/conjure",
-    config = function()
-      require("envi.plugins.conjure").setup()
-    end,
-  }
-
-  use "tpope/vim-sexp-mappings-for-regular-people"
+  -- use {
+  --   "Olical/conjure",
+  --   config = function()
+  --     require("envi.plugins.conjure").setup()
+  --   end,
+  -- }
+  --
+  -- use "tpope/vim-sexp-mappings-for-regular-people"
 
   -- file explorer
   use {
@@ -350,6 +350,11 @@ return require("packer").startup(function(use)
       vim.keymap.set("n", "<leader>gg", neogit.open)
     end,
   }
+
+  -- nvim debugger
+  use "mfussenegger/nvim-dap"
+  use "mfussenegger/nvim-dap-python"
+  -- use "mfussenegger/nvim-dap-go"
 
   -- lua repl and evaluation
   -- use {

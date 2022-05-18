@@ -20,7 +20,8 @@ local sources = {
   },
   b.formatting.deno_fmt,
   -- Python
-  b.formatting.black,
+  b.formatting.black.with { extra_args = { "--line-length=99" } },
+  b.diagnostics.flake8.with { extra_args = { "--max-line-length=99" } },
   -- b.formatting.mypy,
   -- Lua
   b.formatting.stylua,
@@ -49,7 +50,7 @@ M.setup = function()
     sources = sources,
     --   -- format on save
     on_attach = function(client)
-      if client.resolved_capabilities.document_formatting then
+      if client.server_capabilities.document_formatting then
         vim.cmd "autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()"
       end
     end,

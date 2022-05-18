@@ -8,9 +8,6 @@ local config = {
   completion = {
     completeopt = "menuone,noselect",
   },
-  documentation = {
-    border = "single",
-  },
   snippet = {
     expand = function(args)
       require("luasnip").lsp_expand(args.body)

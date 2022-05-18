@@ -58,7 +58,8 @@ if cmp_nvim_lua_present then
 end
 
 local function on_attach(client, bufnr)
-  client.resolved_capabilities.document_formatting = false
+  client.server_capabilities.document_formatting = false
+
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   local lsp_status_present, lsp_status = pcall(require, "lsp-status")
