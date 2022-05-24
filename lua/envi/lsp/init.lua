@@ -1,4 +1,6 @@
 local lspconfig = require "lspconfig"
+local aerial = require "aerial"
+local python = require "envi.lsp.python"
 
 vim.fn.sign_define(
   "DiagnosticSignError",
@@ -67,10 +69,12 @@ local function on_attach(client, bufnr)
     lsp_status.on_attach(client)
     capabilities = lsp_status.capabilities
   end
+
+  aerial.on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "pyright", "tsserver", "clojure_lsp", "gopls", "tailwindcss" }
+local servers = { "html", "cssls", "tsserver", "clojure_lsp", "gopls", "tailwindcss" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -82,6 +86,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+-- Lua
 local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/Linux/lua-language-server"
 
@@ -105,6 +110,27 @@ lspconfig.sumneko_lua.setup {
     },
   },
 }
+
+-- Python
+lspconfig.pyright.setup {
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    python.setup_dap()
+  end,
+  capabilities = capabilities,
+}
+
+-- Rust
+local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.0/"
+local codelldb_path = extension_path .. "adapter/codelldb"
+local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+
+local opts = {
+  dap = {
+    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+  },
+}
+require("rust-tools").setup(opts)
 
 --[[
   LSP related keymaps

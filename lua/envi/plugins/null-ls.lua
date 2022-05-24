@@ -50,9 +50,9 @@ M.setup = function()
     sources = sources,
     --   -- format on save
     on_attach = function(client)
-      if client.server_capabilities.document_formatting then
-        vim.cmd "autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()"
-      end
+      -- if client.server_capabilities.document_formatting then
+        vim.cmd "autocmd BufWritePre <buffer> lua vim.lsp.buf.format()"
+      -- end
     end,
   }
 end

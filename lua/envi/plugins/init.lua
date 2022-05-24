@@ -214,10 +214,6 @@ return require("packer").startup(function(use)
   use {
     "nvim-telescope/telescope.nvim",
     module = "telescope",
-    requires = {
-      "nvim-telescope/telescope-node-modules.nvim",
-      "xiyaowong/telescope-emoji.nvim",
-    },
     config = function()
       require("envi.plugins.telescope").setup()
     end,
@@ -226,11 +222,21 @@ return require("packer").startup(function(use)
   -- search node_modules
   use {
     "nvim-telescope/telescope-node-modules.nvim",
+    requires = { "nvim-telescope/telescope.nvim" },
   }
 
   -- search emojis
   use {
     "xiyaowong/telescope-emoji.nvim",
+    requires = { "nvim-telescope/telescope.nvim" },
+  }
+
+  use {
+    "nvim-telescope/telescope-dap.nvim",
+    requires = { "nvim-telescope/telescope.nvim" },
+    config = function()
+      require("telescope").load_extension "dap"
+    end,
   }
 
   -- time tracking
@@ -249,7 +255,8 @@ return require("packer").startup(function(use)
   use {
     "ThePrimeagen/harpoon",
     requires = {
-      { "nvim-lua/plenary.nvim" },
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
     },
     config = function()
       require("telescope").load_extension "harpoon"
@@ -352,13 +359,46 @@ return require("packer").startup(function(use)
   }
 
   -- nvim debugger
-  use "mfussenegger/nvim-dap"
-  use "mfussenegger/nvim-dap-python"
+  use {
+    "mfussenegger/nvim-dap",
+    config = function()
+      require "envi.plugins.dap"
+    end,
+  }
+  use {
+    "theHamsta/nvim-dap-virtual-text",
+    requires = "mfussenegger/nvim-dap",
+    config = function()
+      require("nvim-dap-virtual-text").setup()
+    end,
+  }
+  use { "mfussenegger/nvim-dap-python", requires = "mfussenegger/nvim-dap" }
   -- use "mfussenegger/nvim-dap-go"
+
+  use "simrat39/rust-tools.nvim"
 
   -- lua repl and evaluation
   -- use {
   --   "bfredl/nvim-luadev",
   --   config = function() end,
   -- }
+
+  use {
+    "stevearc/aerial.nvim",
+    config = function()
+      require("aerial").setup {
+        default_direction = "left",
+        on_attach = function(bufnr)
+          -- Toggle the aerial window with <leader>a
+          vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>a", "<cmd>AerialToggle!<CR>", {})
+          -- Jump forwards/backwards with '{' and '}'
+          vim.api.nvim_buf_set_keymap(bufnr, "n", "{", "<cmd>AerialPrev<CR>", {})
+          vim.api.nvim_buf_set_keymap(bufnr, "n", "}", "<cmd>AerialNext<CR>", {})
+          -- Jump up the tree with '[[' or ']]'
+          vim.api.nvim_buf_set_keymap(bufnr, "n", "[[", "<cmd>AerialPrevUp<CR>", {})
+          vim.api.nvim_buf_set_keymap(bufnr, "n", "]]", "<cmd>AerialNextUp<CR>", {})
+        end,
+      }
+    end,
+  }
 end)
