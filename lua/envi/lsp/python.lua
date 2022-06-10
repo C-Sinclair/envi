@@ -5,6 +5,14 @@ local dap_python = require "dap-python"
 
 local python_exe = os.getenv "HOME" .. "/.asdf/shims/python"
 
+PY = function()
+  dap.run {
+    type = "python",
+    request = "launch",
+    program = "${file}",
+  }
+end
+
 M.setup_dap = function()
   dap_python.setup(python_exe)
   dap_python.test_runner = "pytest"
@@ -19,11 +27,7 @@ M.setup_dap = function()
     {
       type = "python",
       request = "launch",
-      name = "Launch file",
       program = "${file}",
-      pythonPath = function()
-        return python_exe
-      end,
     },
   }
 
