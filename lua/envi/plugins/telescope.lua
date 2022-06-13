@@ -82,20 +82,6 @@ M.setup = function()
     require("telescope.builtin").live_grep()
   end)
 
-  -- search open buffers
-  vim.keymap.set("n", "<C-b>", function()
-    require("telescope.builtin").buffers {
-      attach_mappings = function(prompt_bufnr, map)
-        map("i", "<C-R>", function()
-          local selection = action_state.get_selected_entry()
-          vim.api.nvim_command("bdelete " .. selection.bufnr)
-          action_state.get_current_picker(prompt_bufnr):refresh()
-        end)
-        return true
-      end,
-    }
-  end)
-
   -- reopen last search
   vim.keymap.set("n", "<C-t><C-t>", function()
     require("telescope.builtin").resume()

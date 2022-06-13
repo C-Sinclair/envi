@@ -283,9 +283,15 @@ return require("packer").startup(function(use)
 
   -- file explorer
   use {
-    "luukvbaal/nnn.nvim",
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v2.x",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
     config = function()
-      require("envi.plugins.nnn").setup()
+      require("envi.plugins.neotree").setup()
     end,
   }
 
