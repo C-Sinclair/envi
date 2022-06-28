@@ -1,60 +1,86 @@
-vim.g.dashboard_disable_at_vimenter = 0
-vim.g.dashboard_disable_statusline = 1
-vim.g.dashboard_default_executive = "telescope"
-vim.g.dashboard_custom_header = {
-  [[                                                   /]],
-  [[                                                 .7 ]],
-  [[                                      \       , //  ]],
-  [[                                      |\.--._/|//   ]],
-  [[                                     /\ ) ) ).'/    ]],
-  [[                                    /(  \  // /     ]],
-  [[                                   /(   J`((_/ \    ]],
-  [[                                  / ) | _\     /    ]],
-  [[                                 /|)  \  eJ    L    ]],
-  [[                                |  \ L \   L   L    ]],
-  [[                               /  \  J  `. J   L    ]],
-  [[                               |  )   L   \/   \    ]],
-  [[                              /  \    J   (\   /    ]],
-  [[            _....___         |  \      \   \```     ]],
-  [[     ,.._.-'        '''--...-||\     -. \   \       ]],
-  [[   .'.=.'                    `         `.\ [ Y      ]],
-  [[  /   /                                  \]  J      ]],
-  [[ Y / Y                                    Y   L     ]],
-  [[ | | |          \                         |   L     ]],
-  [[ | | |           Y                        A  J      ]],
-  [[ |   I           |                       /I\ /      ]],
-  [[ |    \          I             \        ( |]/|      ]],
-  [[ J     \         /._           /        -tI/ |      ]],
-  [[  L     )       /   /'-------'J           `'-:.     ]],
-  [[  J   .'      ,'  ,' ,     \   `'-.__          \    ]],
-  [[   \ T      ,'  ,'   )\    /|        ';'---7   /    ]],
-  [[    \|    ,'L  Y...-' / _.' /         \   /   /     ]],
-  [[     J   Y  |  J    .'-'   /         ,--.(   /      ]],
-  [[      L  |  J   L -'     .'         /  |    /\      ]],
-  [[      |  J.  L  J     .-;.-/       |    \ .' /      ]],
-  [[      J   L`-J   L____,.-'`        |  _.-'   |      ]],
-  [[       L  J   L  J                  ``  J    |      ]],
-  [[       J   L  |   L                     J    |      ]],
-  [[        L  J  L    \                    L    \      ]],
-  [[        |   L  ) _.'\                    ) _.'\     ]],
-  [[        L    \('`    \                  ('`    \    ]],
-  [[         ) _.'\`-....'                   `-....'    ]],
-  [[        ('`    \                                    ]],
-  [[         `-.___/   schweeeeeeeeeeeeeeeeeeeeeeee     ]],
-}
-
-vim.g.dashboard_custom_section = {
-  a = { description = { "  Find File                 Ctrl p" }, command = "Telescope find_files" },
-  b = { description = { "  Recents                         " }, command = "Telescope oldfiles" },
-  c = { description = { "  Find Word                 Ctrl f" }, command = "Telescope live_grep" },
-  d = { description = { "洛 New File                        " }, command = "DashboardNewFile" },
-}
-
-vim.g.dashboard_custom_footer = {
-  "   ",
-}
-
 local M = {}
+
+local home = os.getenv "HOME"
+local dashboard = require "dashboard"
+
+dashboard.custom_header = {
+  "",
+  "",
+  "",
+  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣤⣴⣦⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+  "⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⠿⠿⠿⠿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠀⠀ ",
+  "⠀⠀⠀⠀⣠⣾⣿⣿⡿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⢿⣿⣿⣶⡀⠀⠀⠀⠀ ",
+  "⠀⠀⠀⣴⣿⣿⠟⠁⠀⠀⠀⣶⣶⣶⣶⡆⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣦⠀⠀⠀ ",
+  "⠀⠀⣼⣿⣿⠋⠀⠀⠀⠀⠀⠛⠛⢻⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣧⠀⠀ ",
+  "⠀⢸⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⡇⠀ ",
+  "⠀⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⠀ ",
+  "⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⡟⢹⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⣹⣿⣿⠀ ",
+  "⠀⣿⣿⣷⠀⠀⠀⠀⠀⠀⣰⣿⣿⠏⠀⠀⢻⣿⣿⡄⠀⠀⠀⠀⠀⠀⣿⣿⡿⠀ ",
+  "⠀⢸⣿⣿⡆⠀⠀⠀⠀⣴⣿⡿⠃⠀⠀⠀⠈⢿⣿⣷⣤⣤⡆⠀⠀⣰⣿⣿⠇⠀ ",
+  "⠀⠀⢻⣿⣿⣄⠀⠀⠾⠿⠿⠁⠀⠀⠀⠀⠀⠘⣿⣿⡿⠿⠛⠀⣰⣿⣿⡟⠀⠀ ",
+  "⠀⠀⠀⠻⣿⣿⣧⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⠏⠀⠀⠀ ",
+  "⠀⠀⠀⠀⠈⠻⣿⣿⣷⣤⣄⡀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⠟⠁⠀⠀⠀⠀ ",
+  "⠀⠀⠀⠀⠀⠀⠈⠛⠿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⠿⠋⠁⠀⠀⠀⠀⠀⠀ ",
+  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠛⠛⠛⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+  "",
+  "",
+  "",
+}
+
+dashboard.hide_statusline = true
+dashboard.hide_tabline = true
+dashboard.preview_file_height = 12
+dashboard.preview_file_width = 80
+
+-- dashboard.custom_header = {
+--   [[                                                   /]],
+--   [[                                                 .7 ]],
+--   [[                                      \       , //  ]],
+--   [[                                      |\.--._/|//   ]],
+--   [[                                     /\ ) ) ).'/    ]],
+--   [[                                    /(  \  // /     ]],
+--   [[                                   /(   J`((_/ \    ]],
+--   [[                                  / ) | _\     /    ]],
+--   [[                                 /|)  \  eJ    L    ]],
+--   [[                                |  \ L \   L   L    ]],
+--   [[                               /  \  J  `. J   L    ]],
+--   [[                               |  )   L   \/   \    ]],
+--   [[                              /  \    J   (\   /    ]],
+--   [[            _....___         |  \      \   \```     ]],
+--   [[     ,.._.-'        '''--...-||\     -. \   \       ]],
+--   [[   .'.=.'                    `         `.\ [ Y      ]],
+--   [[  /   /                                  \]  J      ]],
+--   [[ Y / Y                                    Y   L     ]],
+--   [[ | | |          \                         |   L     ]],
+--   [[ | | |           Y                        A  J      ]],
+--   [[ |   I           |                       /I\ /      ]],
+--   [[ |    \          I             \        ( |]/|      ]],
+--   [[ J     \         /._           /        -tI/ |      ]],
+--   [[  L     )       /   /'-------'J           `'-:.     ]],
+--   [[  J   .'      ,'  ,' ,     \   `'-.__          \    ]],
+--   [[   \ T      ,'  ,'   )\    /|        ';'---7   /    ]],
+--   [[    \|    ,'L  Y...-' / _.' /         \   /   /     ]],
+--   [[     J   Y  |  J    .'-'   /         ,--.(   /      ]],
+--   [[      L  |  J   L -'     .'         /  |    /\      ]],
+--   [[      |  J.  L  J     .-;.-/       |    \ .' /      ]],
+--   [[      J   L`-J   L____,.-'`        |  _.-'   |      ]],
+--   [[       L  J   L  J                  ``  J    |      ]],
+--   [[       J   L  |   L                     J    |      ]],
+--   [[        L  J  L    \                    L    \      ]],
+--   [[        |   L  ) _.'\                    ) _.'\     ]],
+--   [[        L    \('`    \                  ('`    \    ]],
+--   [[         ) _.'\`-....'                   `-....'    ]],
+--   [[        ('`    \                                    ]],
+--   [[         `-.___/   schweeeeeeeeeeeeeeeeeeeeeeee     ]],
+-- }
+
+dashboard.custom_center = {
+  { icon = "  ", desc = "Find File  ", action = "Telescope find_files" },
+  { icon = "  ", desc = "Recents    ", action = "Telescope oldfiles" },
+  { icon = "  ", desc = "Find Word  ", action = "Telescope live_grep" },
+  { icon = "洛 ", desc = "New File   ", action = "DashboardNewFile" },
+}
+dashboard.custom_footer = nil
 
 M.setup = function() end
 
