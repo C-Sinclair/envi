@@ -36,7 +36,8 @@ local sources = {
   b.formatting.markdownlint,
   -- Prisma
   b.formatting.prismaFmt,
-
+  -- Rust
+  b.formatting.rustfmt,
   -- Shell
   -- b.formatting.shfmt,
   -- b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
@@ -51,7 +52,7 @@ M.setup = function()
     --   -- format on save
     on_attach = function(client)
       -- if client.server_capabilities.document_formatting then
-        vim.cmd "autocmd BufWritePre <buffer> lua vim.lsp.buf.format()"
+      vim.cmd "autocmd BufWritePre <buffer> lua vim.lsp.buf.format()"
       -- end
     end,
   }

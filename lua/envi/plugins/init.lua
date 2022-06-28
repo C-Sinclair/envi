@@ -14,6 +14,9 @@ end
 vim.cmd [[packadd packer.nvim]]
 
 return require("packer").startup(function(use)
+  -- packer installs plugins (and itself)
+  use "wbthomason/packer.nvim"
+
   -- run tasks etc
   use "nvim-lua/plenary.nvim"
 
@@ -22,12 +25,6 @@ return require("packer").startup(function(use)
 
   -- a better & faster filetype plugin
   use { "nathom/filetype.nvim" }
-
-  -- packer installs plugins (and itself)
-  use {
-    "wbthomason/packer.nvim",
-    event = "VimEnter",
-  }
 
   -- icons!
   use {
@@ -214,6 +211,7 @@ return require("packer").startup(function(use)
   use {
     "nvim-telescope/telescope.nvim",
     module = "telescope",
+    requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("envi.plugins.telescope").setup()
     end,
@@ -405,6 +403,65 @@ return require("packer").startup(function(use)
           vim.api.nvim_buf_set_keymap(bufnr, "n", "]]", "<cmd>AerialNextUp<CR>", {})
         end,
       }
+    end,
+  }
+
+  -- lsp status on startup
+  use {
+    "j-hui/fidget.nvim",
+    config = function()
+      require("fidget").setup()
+    end,
+  }
+
+  -- pretty quickfix list
+  use {
+    "https://gitlab.com/yorickpeterse/nvim-pqf.git",
+    config = function()
+      require("pqf").setup()
+    end,
+  }
+
+  -- testing super powers
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+      "haydenmeade/neotest-jest",
+      "nvim-neotest/neotest-go",
+    },
+    config = function()
+      require("neotest").setup {
+        adapters = {
+          require "neotest-python" {
+            dap = { justMyCode = false },
+          },
+          require "neotest-jest" {
+            jestCommand = "yarn test --",
+          },
+          require "neotest-go",
+        },
+      }
+    end,
+  }
+
+  -- stylish buffer switching
+  use {
+    "ghillb/cybu.nvim",
+    branch = "main",
+    requires = { "kyazdani42/nvim-web-devicons" },
+    config = function()
+      local ok, cybu = pcall(require, "cybu")
+      if not ok then
+        return
+      end
+      cybu.setup()
+      vim.keymap.set("n", "<c-w>N", "<cmd>CybuPrev<cr>")
+      vim.keymap.set("n", "<c-w>n", "<cmd>CybuNext<cr>")
+      vim.keymap.set("n", "<c-w><tab>", "<cmd>CybuLastusedNext<cr>")
     end,
   }
 end)

@@ -28,6 +28,7 @@ M.setup_dap = function()
       type = "python",
       request = "launch",
       program = "${file}",
+      justMyCode = false,
     },
   }
 
