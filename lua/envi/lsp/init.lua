@@ -121,6 +121,21 @@ lspconfig.pyright.setup {
 }
 
 -- Rust
+--
+-- no rust tools version
+-- lspconfig.rust_analyzer.setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   settings = {
+--     ["rust-analyzer"] = {
+--       procMacro = {
+--         enable = false,
+--       },
+--     },
+--   },
+-- }
+
+-- rust tools to do the heavy lifting
 local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.0/"
 local codelldb_path = extension_path .. "adapter/codelldb"
 local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
@@ -132,9 +147,11 @@ local opts = {
   server = {
     settings = {
       ["rust-analyzer"] = {
-        -- procMacro = {
-        --   enable = false,
-        -- },
+        diagnostics = {
+          enable = true,
+          disabled = { "unresolved-proc-macro" },
+          enableExperimental = true,
+        },
       },
     },
   },
