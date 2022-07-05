@@ -90,26 +90,32 @@ end
 local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/Linux/lua-language-server"
 
-lspconfig.sumneko_lua.setup {
-  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+local luadev = require("lua-dev").setup {
+  -- add any options here, or leave empty to use the default settings
+  lspconfig = {
+    cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = { "vim" },
         },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
+        workspace = {
+          library = {
+            [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+            [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+          },
+          maxPreload = 100000,
+          preloadFileSize = 10000,
+        },
       },
     },
   },
 }
+
+local lspconfig = require "lspconfig"
+lspconfig.sumneko_lua.setup(luadev)
 
 -- Python
 lspconfig.pyright.setup {

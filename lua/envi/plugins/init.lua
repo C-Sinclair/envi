@@ -464,4 +464,9 @@ return require("packer").startup(function(use)
       vim.keymap.set("n", "<c-w><tab>", "<cmd>CybuLastusedNext<cr>")
     end,
   }
+
+  -- lua help inside vim
+  use "milisims/nvim-luaref"
+
+  use "folke/lua-dev.nvim"
 end)
