@@ -87,6 +87,9 @@ M.setup = function()
     require("telescope.builtin").resume()
   end)
 
+  -- show open buffers
+  vim.keymap.set({ "n", "t" }, "<C-b>", "<cmd>Telescope buffers<cr>")
+
   -- show git worktrees
   vim.keymap.set("n", "<leader>gb", function()
     require("telescope").extensions.git_worktree.git_worktrees()

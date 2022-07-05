@@ -177,7 +177,6 @@ M.setup = function()
   }
 
   vim.keymap.set({ "n", "t" }, "<C-n>", "<cmd>Neotree toggle<cr>")
-  vim.keymap.set({ "n", "t" }, "<C-b>", "<cmd>Neotree buffers toggle<cr>")
 end
 
 return M

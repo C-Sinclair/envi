@@ -88,7 +88,7 @@ end
 
 -- Lua
 local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
-local sumneko_binary = sumneko_root_path .. "/bin/Linux/lua-language-server"
+local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
 local luadev = require("lua-dev").setup {
   -- add any options here, or leave empty to use the default settings
@@ -99,7 +99,7 @@ local luadev = require("lua-dev").setup {
     settings = {
       Lua = {
         diagnostics = {
-          globals = { "vim" },
+          globals = { "vim", "awesome", "client", "screen", "root" },
         },
         workspace = {
           library = {
