@@ -3,6 +3,12 @@ function P(args)
   print(vim.inspect(args))
 end
 
+-- reload modules, avoiding the lua cache
+function R(module)
+  package.loaded[module] = nil
+  require(module)
+end
+
 --[[
 -- Split a string by a delimiter 
 -- @param string delimiter - what to split by
