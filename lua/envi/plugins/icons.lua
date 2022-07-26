@@ -4,7 +4,7 @@ if not present then
   return
 end
 
-local colours = require("catppuccin.api.colors").get_colors()
+local colours = require("catppuccin.palettes").get_palette()
 
 local config = {
   c = {

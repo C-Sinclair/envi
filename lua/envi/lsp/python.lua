@@ -3,7 +3,7 @@ local M = {}
 local dap = require "dap"
 local dap_python = require "dap-python"
 
-local python_exe = os.getenv "HOME" .. "/.asdf/shims/python"
+local python_exe = os.getenv "HOME" .. "/.virtualenvs/debugpy/bin/python"
 
 PY = function()
   dap.run {
@@ -16,6 +16,7 @@ end
 M.setup_dap = function()
   dap_python.setup(python_exe)
   dap_python.test_runner = "pytest"
+  dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
 
   dap.adapters.python = {
     type = "executable",
@@ -23,11 +24,16 @@ M.setup_dap = function()
     args = { "-m", "debugpy.adapter" },
   }
 
+  local cwd = vim.fn.getcwd()
   dap.configurations.python = {
     {
       type = "python",
       request = "launch",
       program = "${file}",
+      cwd = cwd,
+      env = { PYTHONPATH = cwd },
+      console = "integratedTerminal",
+      name = "Run file",
       justMyCode = false,
     },
   }

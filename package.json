@@ -1,0 +1,8 @@
+{
+  "name": "envi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:C-Sinclair/envi.git",
+  "author": "Conor Sinclair <conor@sinclair.software>",
+  "license": "MIT"
+}

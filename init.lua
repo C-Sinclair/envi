@@ -12,6 +12,16 @@ require "envi.lsp"
 -- load the theme
 local theme_present, theme = pcall(require, "catppuccin")
 if theme_present then
-  theme.setup()
+  theme.setup {
+    transparent_background = true,
+    term_colors = true,
+    integrations = {
+      neotree = {
+        enabled = true,
+        transparent_panel = true,
+      },
+      neogit = true,
+    },
+  }
 end
 vim.cmd [[colorscheme catppuccin]]

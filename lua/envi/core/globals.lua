@@ -6,7 +6,7 @@ end
 -- reload modules, avoiding the lua cache
 function R(module)
   package.loaded[module] = nil
-  require(module)
+  return require(module)
 end
 
 --[[

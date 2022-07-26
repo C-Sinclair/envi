@@ -435,9 +435,14 @@ return require("packer").startup(function(use)
     },
     config = function()
       require("neotest").setup {
+        output = {
+          enabled = true,
+          open_on_run = "yes",
+        },
         adapters = {
           require "neotest-python" {
-            dap = { justMyCode = false },
+            runner = "pytest",
+            dap = { justMyCode = false, console = "integratedTerminal" },
           },
           require "neotest-jest" {
             jestCommand = "yarn test --",
