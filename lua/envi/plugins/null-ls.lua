@@ -16,6 +16,7 @@ local sources = {
       "vue",
       "scss",
       "less",
+      "svelte",
     },
   },
   b.formatting.deno_fmt,
