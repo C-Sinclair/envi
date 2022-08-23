@@ -1,6 +1,6 @@
 local lspconfig = require "lspconfig"
 local aerial = require "aerial"
-local python = require "envi.lsp.python"
+local capabilities = require "envi.lsp.capabilities"
 
 vim.fn.sign_define(
   "DiagnosticSignError",
@@ -37,44 +37,19 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   update_in_insert = true,
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.documentationFormat = { "markdown", "plaintext" }
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.preselectSupport = true
-capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
-capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
-capabilities.textDocument.completion.completionItem.deprecatedSupport = true
-capabilities.textDocument.completion.completionItem.commitCharactersSupport = true
-capabilities.textDocument.completion.completionItem.tagSupport = { valueSet = { 1 } }
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    "documentation",
-    "detail",
-    "additionalTextEdits",
-  },
-}
-
-local cmp_nvim_lua_present, cmp_nvim_lua = pcall(require, "cmp_nvim_lua")
-if cmp_nvim_lua_present then
-  capabilities = cmp_nvim_lua.update_capabilities(capabilities)
-end
-
 local function on_attach(client, bufnr)
   client.server_capabilities.document_formatting = false
 
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  local lsp_status_present, lsp_status = pcall(require, "lsp-status")
-  if lsp_status_present then
-    lsp_status.on_attach(client)
-    capabilities = lsp_status.capabilities
-  end
 
+  local lsp_status = require "lsp-status"
+  lsp_status.on_attach(client)
   aerial.on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "tsserver", "clojure_lsp", "gopls", "tailwindcss", "svelte" }
+local servers = { "html", "cssls", "clojure_lsp", "gopls", "tailwindcss", "svelte" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -85,84 +60,6 @@ for _, lsp in ipairs(servers) do
     },
   }
 end
-
--- Lua
-local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
-local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
-
-local luadev = require("lua-dev").setup {
-  -- add any options here, or leave empty to use the default settings
-  lspconfig = {
-    cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-      Lua = {
-        diagnostics = {
-          globals = { "vim", "awesome", "client", "screen", "root" },
-        },
-        workspace = {
-          library = {
-            [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-            [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-          },
-          maxPreload = 100000,
-          preloadFileSize = 10000,
-        },
-      },
-    },
-  },
-}
-
-local lspconfig = require "lspconfig"
-lspconfig.sumneko_lua.setup(luadev)
-
--- Python
-lspconfig.pyright.setup {
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-    python.setup_dap()
-  end,
-  capabilities = capabilities,
-}
-
--- Rust
---
--- no rust tools version
--- lspconfig.rust_analyzer.setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
---   settings = {
---     ["rust-analyzer"] = {
---       procMacro = {
---         enable = false,
---       },
---     },
---   },
--- }
-
--- rust tools to do the heavy lifting
-local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.0/"
-local codelldb_path = extension_path .. "adapter/codelldb"
-local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-
-local opts = {
-  dap = {
-    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-  },
-  server = {
-    settings = {
-      ["rust-analyzer"] = {
-        diagnostics = {
-          enable = true,
-          disabled = { "unresolved-proc-macro" },
-          enableExperimental = true,
-        },
-      },
-    },
-  },
-}
-require("rust-tools").setup(opts)
 
 --[[
   LSP related keymaps
@@ -193,7 +90,7 @@ vim.keymap.set("n", "<leader>ls", function()
   vim.lsp.buf.signature_help()
 end)
 
--- Open iagnostics
+-- Open Diagnostics
 vim.keymap.set("n", "<leader>de", function()
   vim.diagnostic.open_float()
 end)
@@ -206,3 +103,9 @@ end)
 vim.keymap.set("n", "<leader>dF", function()
   vim.diagnostic.goto_prev()
 end)
+
+-- Language specific config
+require "envi.lsp.python"
+require "envi.lsp.lua"
+require "envi.lsp.typescript"
+require "envi.lsp.rust"

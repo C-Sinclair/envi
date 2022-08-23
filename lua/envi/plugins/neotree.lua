@@ -177,6 +177,7 @@ M.setup = function()
   }
 
   vim.keymap.set({ "n", "t" }, "<C-n>", "<cmd>Neotree toggle reveal_force_cwd<cr>")
+  vim.keymap.set({ "n", "t" }, "<M-n>", "<cmd>Neotree diagnostics reveal bottom<cr>")
 end
 
 return M

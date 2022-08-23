@@ -86,6 +86,14 @@ return require("packer").startup(function(use)
   -- lsp stuff
   use "neovim/nvim-lspconfig"
 
+  -- use {
+  --   "m-demare/hlargs.nvim",
+  --   requires = { "nvim-treesitter/nvim-treesitter" },
+  --   config = function()
+  --     require("hlargs").setup()
+  --   end,
+  -- }
+
   -- function signatures in lsp
   use {
     "ray-x/lsp_signature.nvim",
@@ -104,6 +112,9 @@ return require("packer").startup(function(use)
       require("envi.plugins.lsp_status").setup()
     end,
   }
+
+  -- typescript specific lsp
+  use "jose-elias-alvarez/typescript.nvim"
 
   -- extend '%' to hop between extra stuff!
   use { "andymass/vim-matchup" }
@@ -262,12 +273,12 @@ return require("packer").startup(function(use)
   }
 
   -- AI code completion
-  use {
-    "github/copilot.vim",
-    config = function()
-      require("envi.plugins.copilot").setup()
-    end,
-  }
+  -- use {
+  --   "github/copilot.vim",
+  --   config = function()
+  --     require("envi.plugins.copilot").setup()
+  --   end,
+  -- }
 
   -- interactive LISPs and such
   -- use {
@@ -291,6 +302,12 @@ return require("packer").startup(function(use)
     config = function()
       require("envi.plugins.neotree").setup()
     end,
+  }
+
+  use {
+    "mrbjarksen/neo-tree-diagnostics.nvim",
+    requires = "nvim-neo-tree/neo-tree.nvim",
+    module = "neo-tree.sources.diagnostics",
   }
 
   -- theme
@@ -378,6 +395,14 @@ return require("packer").startup(function(use)
   }
   use { "mfussenegger/nvim-dap-python", requires = "mfussenegger/nvim-dap" }
   -- use "mfussenegger/nvim-dap-go"
+  use "rcarriga/nvim-dap-ui"
+
+  use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
+  use {
+    "microsoft/vscode-js-debug",
+    opt = true,
+    run = "npm install --legacy-peer-deps && npm run compile",
+  }
 
   use "simrat39/rust-tools.nvim"
 

@@ -1,4 +1,6 @@
 local dap = require "dap"
+local dapui = require "dapui"
+local dapjs = require "dap-vscode-js"
 
 vim.g.dap_virtual_text = true
 
@@ -45,34 +47,69 @@ dap.listeners.after["event_terminated"]["me"] = function()
   keymap_restore = {}
 end
 
-dap.adapters.chrome = {
-  type = "executable",
-  command = "node",
-  args = { os.getenv "HOME" .. "/path/to/vscode-chrome-debug/out/src/chromeDebug.js" }, -- TODO adjust
+--[[ dap.adapters.chrome = { ]]
+--[[   type = "executable", ]]
+--[[   command = "node", ]]
+--[[   args = { os.getenv "HOME" .. "/Repos/microsoft/vscode-chrome-debug/out/src/chromeDebug.js" }, ]]
+
+dapjs.setup {
+  -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+  -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+  adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }, -- which adapters to register in nvim-dap
 }
 
-dap.configurations.javascriptreact = { -- change this to javascript if needed
-  {
-    type = "chrome",
-    request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    port = 9222,
-    webRoot = "${workspaceFolder}",
-  },
-}
+for _, language in ipairs { "typescript", "javascript", "typescriptreact", "javascriptreact" } do
+  dap.configurations[language] = {
+    {
+      type = "chrome",
+      name = "chrome",
+      request = "attach",
+      program = "${file}",
+      cwd = vim.fn.getcwd(),
+      sourceMaps = true,
+      protocol = "inspector",
+      port = 9222,
+      webRoot = "${workspaceFolder}",
+    },
+    {
+      name = "SSR",
+      type = "node-terminal",
+      request = "launch",
+      command = "npm run dev",
+    },
+    {
+      name = "Client",
+      type = "pwa-chrome",
+      request = "launch",
+      url = "http://localhost:3000",
+    },
+    {
+      type = "node-terminal",
+      name = "Next",
+      request = "launch",
+      command = "pnpm run dev",
+      cwd = vim.fn.getcwd(),
+      serverReadyAction = {
+        pattern = "started server on .+, url: (https?://.+)",
+        uriFormat = "%s",
+        action = "debugWithChrome",
+      },
+    },
+  }
+end
 
-dap.configurations.typescriptreact = { -- change to typescript if needed
-  {
-    type = "chrome",
-    request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    port = 9222,
-    webRoot = "${workspaceFolder}",
-  },
-}
+dapui.setup()
+
+vim.keymap.set("n", "<leader>dd", function()
+  dapui.toggle()
+end)
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
