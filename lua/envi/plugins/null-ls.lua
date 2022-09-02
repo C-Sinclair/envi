@@ -1,4 +1,8 @@
+local lsp = require "vim.lsp.util"
 local null_ls = require "null-ls"
+local log = require "envi.log"
+local fo = require "envi.lsp.formatting"
+
 local b = null_ls.builtins
 
 local sources = {
@@ -25,7 +29,7 @@ local sources = {
   -- JSON
   b.diagnostics.jsonlint,
   -- Tailwind
-  b.formatting.rustywind,
+  -- b.formatting.rustywind,
   -- Python
   b.formatting.black.with { extra_args = { "--line-length=99" } },
   b.diagnostics.flake8.with { extra_args = { "--max-line-length=99" } },
@@ -58,25 +62,13 @@ local sources = {
 
 local M = {}
 
-local augroup = vim.api.nvim_create_augroup("format_on_save", {})
-
 M.setup = function()
   null_ls.setup {
-    -- debug = true,
+    debug = true,
     sources = sources,
     -- format on save
     on_attach = function(client, bufnr)
-      if client.supports_method "textDocument/formatting" then
-        vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = augroup,
-          buffer = bufnr,
-          callback = function()
-            --[[ vim.lsp.buf.formatting_seq_sync() -- deprecated ]]
-            vim.lsp.buf.format()
-          end,
-        })
-      end
+      fo.setup_formatting_on_attach(client, bufnr)
     end,
   }
 end

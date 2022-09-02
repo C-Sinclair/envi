@@ -1,6 +1,7 @@
 local lspconfig = require "lspconfig"
 local aerial = require "aerial"
 local capabilities = require "envi.lsp.capabilities"
+local fo = require "envi.lsp.formatting"
 
 vim.fn.sign_define(
   "DiagnosticSignError",
@@ -46,10 +47,18 @@ local function on_attach(client, bufnr)
   local lsp_status = require "lsp-status"
   lsp_status.on_attach(client)
   aerial.on_attach(client, bufnr)
+  fo.setup_formatting_on_attach(client, bufnr)
 end
 
 -- lspservers with default config
-local servers = { "html", "cssls", "clojure_lsp", "gopls", "tailwindcss", "svelte" }
+local servers = {
+  "html",
+  "cssls",
+  "clojure_lsp",
+  "gopls",
+  -- "tailwindcss",
+  "svelte",
+}
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
