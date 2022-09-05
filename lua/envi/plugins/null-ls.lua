@@ -1,7 +1,4 @@
-local lsp = require "vim.lsp.util"
 local null_ls = require "null-ls"
-local log = require "envi.log"
-local fo = require "envi.lsp.formatting"
 
 local b = null_ls.builtins
 
@@ -64,12 +61,7 @@ local M = {}
 
 M.setup = function()
   null_ls.setup {
-    debug = true,
     sources = sources,
-    -- format on save
-    on_attach = function(client, bufnr)
-      fo.setup_formatting_on_attach(client, bufnr)
-    end,
   }
 end
 

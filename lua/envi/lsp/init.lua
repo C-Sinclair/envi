@@ -47,7 +47,6 @@ local function on_attach(client, bufnr)
   local lsp_status = require "lsp-status"
   lsp_status.on_attach(client)
   aerial.on_attach(client, bufnr)
-  fo.setup_formatting_on_attach(client, bufnr)
 end
 
 -- lspservers with default config
@@ -98,6 +97,9 @@ end)
 vim.keymap.set("n", "<leader>ls", function()
   vim.lsp.buf.signature_help()
 end)
+
+-- Formatting
+vim.keymap.set("n", "<leader>lf", fo.format)
 
 -- Open Diagnostics
 vim.keymap.set("n", "<leader>de", function()

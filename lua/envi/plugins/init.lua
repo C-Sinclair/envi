@@ -259,6 +259,7 @@ return require("packer").startup(function(use)
       require("envi.plugins.null-ls").setup()
     end,
   }
+  use "sbdchd/neoformat"
 
   -- different way of marking files
   use {

@@ -1,6 +1,5 @@
 local aerial = require "aerial"
 local ts = require "typescript"
-local fo = require "envi.lsp.formatting"
 
 ts.setup {
   server = {
@@ -13,7 +12,6 @@ ts.setup {
         lsp_status.on_attach(client)
       end
       aerial.on_attach(client, bufnr)
-      fo.setup_formatting_on_attach(client, bufnr)
     end,
     flags = {
       debounce_text_changes = 150,
