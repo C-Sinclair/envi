@@ -55,8 +55,10 @@ local servers = {
   "cssls",
   "clojure_lsp",
   "gopls",
-  -- "tailwindcss",
+  "tailwindcss",
   "svelte",
+  "elmls",
+  "rnix",
 }
 
 for _, lsp in ipairs(servers) do
@@ -68,6 +70,15 @@ for _, lsp in ipairs(servers) do
     },
   }
 end
+
+lspconfig.elixirls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  flags = {
+    debounce_text_changes = 150,
+  },
+  cmd = { "/home/conor/.local/elixir_ls/language_server.sh" },
+}
 
 --[[
   LSP related keymaps
