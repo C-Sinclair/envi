@@ -20,8 +20,9 @@ local sources = {
       "svelte",
     },
   },
-  b.code_actions.xo,
-  b.diagnostics.xo,
+  --[[ b.code_actions.xo, ]]
+  --[[ b.diagnostics.xo, ]]
+  b.diagnostics.eslint_d,
   --[[ b.formatting.deno_fmt, ]]
   -- JSON
   b.diagnostics.jsonlint,
