@@ -509,6 +509,14 @@ return require("packer").startup(function(use)
 
   use "folke/lua-dev.nvim"
 
+  -- smooth scrolling
+  use {
+    "declancm/cinnamon.nvim",
+    config = function()
+      require("envi.plugins.cinnamon").setup()
+    end,
+  }
+
   -- browser vim!
   -- use {
   -- "glacambre/firenvim",
