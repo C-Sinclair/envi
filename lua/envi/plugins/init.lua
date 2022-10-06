@@ -508,4 +508,12 @@ return require("packer").startup(function(use)
   use "milisims/nvim-luaref"
 
   use "folke/lua-dev.nvim"
+
+  -- browser vim!
+  -- use {
+  -- "glacambre/firenvim",
+  -- run = function()
+  -- vim.fn["firenvim#install"](0)
+  -- end,
+  -- }
 end)
