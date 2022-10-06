@@ -176,6 +176,11 @@ return require("packer").startup(function(use)
     after = "cmp-path",
   }
 
+  use {
+    "hrsh7th/cmp-cmdline",
+    after = "nvim-cmp",
+  }
+
   -- automatically close brackets
   use {
     "windwp/nvim-autopairs",
@@ -327,12 +332,22 @@ return require("packer").startup(function(use)
 
   -- status line
   use {
+    "glepnir/galaxyline.nvim",
+    branch = "main",
+    -- your statusline
+    config = function()
+      require("envi.plugins.galaxyline").setup {}
+    end,
+    -- some optional icons
+    requires = { "kyazdani42/nvim-web-devicons" },
+  }
+  --[[ use {
     "nvim-lualine/lualine.nvim",
     after = "catppuccin",
     config = function()
       require("envi.plugins.lualine").setup()
     end,
-  }
+  } ]]
 
   -- symbols tree viewer
   use {

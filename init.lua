@@ -21,6 +21,8 @@ if theme_present then
         transparent_panel = true,
       },
       neogit = true,
+      treesitter = true,
+      cmp = true,
     },
   }
 end
