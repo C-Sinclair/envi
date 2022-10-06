@@ -74,7 +74,11 @@ M.setup = function()
 
   -- show project files
   vim.keymap.set("n", "<C-p>", function()
-    require("telescope.builtin").find_files {}
+    local opts = {}
+    local ok = pcall(require("telescope.builtin").git_files, opts)
+    if not ok then
+      require("telescope.builtin").find_files(opts)
+    end
   end)
 
   -- search by characters
@@ -90,14 +94,9 @@ M.setup = function()
   -- show open buffers
   vim.keymap.set({ "n", "t" }, "<C-b>", "<cmd>Telescope buffers<cr>")
 
-  -- show git worktrees
-  vim.keymap.set("n", "<leader>gb", function()
-    require("telescope").extensions.git_worktree.git_worktrees()
-  end)
-
-  -- create new worktree branch
-  vim.keymap.set("n", "<leader>gn", function()
-    require("telescope").extensions.git_worktree.create_git_worktree()
+  -- show diagnostic issues
+  vim.keymap.set("n", "<C-t><C-d>", function()
+    require("telescope.builtin").diagnostics()
   end)
 end
 
