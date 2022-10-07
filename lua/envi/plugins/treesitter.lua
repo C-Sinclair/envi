@@ -57,6 +57,8 @@ local config = {
   },
 }
 
+vim.cmd 'autocmd BufRead,BufNewFile *.nomad set filetype=hcl'
+
 local M = {}
 
 M.setup = function()
