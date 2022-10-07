@@ -48,7 +48,7 @@ local sources = {
   -- Rust
   b.formatting.rustfmt,
   -- Haskell
-  b.formatting.brittany,
+  b.formatting.stylish_haskell,
   -- Shell
   b.diagnostics.zsh,
   b.formatting.beautysh,
