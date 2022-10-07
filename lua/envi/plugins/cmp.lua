@@ -24,6 +24,7 @@ local config = {
         nvim_lua = "[Lua]",
         path = "[🛤️]",
         luasnip = "[✂️]",
+        cmp_tabnine = "[🕊️]",
       })[entry.source.name]
 
       return vim_item
@@ -67,6 +68,7 @@ local config = {
   },
   sources = {
     { name = "nvim_lsp" },
+    { name = "cmp_tabnine" },
     { name = "nvim_lua" },
     { name = "luasnip" },
     { name = "emoji " },
@@ -96,6 +98,18 @@ M.setup = function()
       { name = "cmdline" },
     }),
   })
+
+  -- prefetch TabNine completions
+  local prefetch = vim.api.nvim_create_augroup("prefetch", { clear = true })
+
+  vim.api.nvim_create_autocmd("BufRead", {
+    group = prefetch,
+    --[[ pattern = "*.py", ]]
+    callback = function()
+      require("cmp_tabnine"):prefetch(vim.fn.expand "%:p")
+    end,
+  })
 end
 
 return M
+
