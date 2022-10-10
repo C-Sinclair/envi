@@ -1,3 +1,5 @@
+vim.g.neoformat_enabled_haskell = { "brittany", "stylishhaskell" }
+
 local M = {}
 
 M.format = function()
