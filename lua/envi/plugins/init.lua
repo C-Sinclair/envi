@@ -522,7 +522,7 @@ return require("packer").startup(function(use)
   -- lua help inside vim
   use "milisims/nvim-luaref"
 
-  use "folke/lua-dev.nvim"
+  use "folke/neodev.nvim"
 
   -- smooth scrolling
   use {
