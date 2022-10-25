@@ -381,6 +381,9 @@ M.setup = function()
       highlight = { colors.shortrighttext, colors.bg },
     },
   })
+
+  -- only have a single status line
+  vim.go.laststatus = 3
 end
 
 return M
