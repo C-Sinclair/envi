@@ -421,13 +421,6 @@ return require("packer").startup(function(use)
   -- use "mfussenegger/nvim-dap-go"
   use "rcarriga/nvim-dap-ui"
 
-  use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
-  use {
-    "microsoft/vscode-js-debug",
-    opt = true,
-    run = "npm install --legacy-peer-deps && npm run compile",
-  }
-
   use "simrat39/rust-tools.nvim"
 
   -- lua repl and evaluation
@@ -564,5 +557,16 @@ return require("packer").startup(function(use)
     config = function()
       require("leap").add_default_mappings()
     end,
+  }
+
+  use {
+    "folke/noice.nvim",
+    event = "VimEnter",
+    config = function()
+      require("noice").setup()
+    end,
+    requires = {
+      "MunifTanjim/nui.nvim",
+    },
   }
 end)
