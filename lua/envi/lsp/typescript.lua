@@ -1,4 +1,3 @@
-local aerial = require "aerial"
 local ts = require "typescript"
 
 ts.setup {
@@ -11,7 +10,6 @@ ts.setup {
       if lsp_status_present then
         lsp_status.on_attach(client)
       end
-      aerial.on_attach(client, bufnr)
     end,
     flags = {
       debounce_text_changes = 150,

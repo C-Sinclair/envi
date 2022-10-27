@@ -1,4 +1,3 @@
-local aerial = require "aerial"
 local capabilities = require "envi.lsp.capabilities"
 
 local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
@@ -18,7 +17,6 @@ lspconfig.sumneko_lua.setup {
     if lsp_status_present then
       lsp_status.on_attach(client)
     end
-    aerial.on_attach(client, bufnr)
   end,
   capabilities = capabilities,
   settings = {

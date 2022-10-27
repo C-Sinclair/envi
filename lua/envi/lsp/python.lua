@@ -1,7 +1,6 @@
 local dap = require "dap"
 local dap_python = require "dap-python"
 local lspconfig = require "lspconfig"
-local aerial = require "aerial"
 local capabilities = require "envi.lsp.capabilities"
 
 local python_exe = os.getenv "HOME" .. "/.virtualenvs/debugpy/bin/python"
@@ -51,7 +50,6 @@ lspconfig.pyright.setup {
       lsp_status.on_attach(client)
     end
 
-    aerial.on_attach(client, bufnr)
     setup_dap()
   end,
   capabilities = capabilities,
