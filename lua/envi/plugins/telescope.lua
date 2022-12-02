@@ -3,6 +3,9 @@ if not present then
   return
 end
 
+local builtin = require "telescope.builtin"
+local sorters = require "telescope.sorters"
+local previewers = require "telescope.previewers"
 local action_state = require "telescope.actions.state"
 
 local config = {
@@ -37,9 +40,9 @@ local config = {
       height = 0.80,
       preview_cutoff = 120,
     },
-    file_sorter = require("telescope.sorters").get_fuzzy_file,
+    file_sorter = sorters.get_fuzzy_file,
     file_ignore_patterns = { "node_modules" },
-    generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
+    generic_sorter = sorters.get_generic_fuzzy_sorter,
     path_display = { "truncate" },
     -- winblend = 0,
     -- border = {},
@@ -47,11 +50,11 @@ local config = {
     color_devicons = true,
     -- use_less = true,
     set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
-    file_previewer = require("telescope.previewers").vim_buffer_cat.new,
-    grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
-    qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+    file_previewer = previewers.vim_buffer_cat.new,
+    grep_previewer = previewers.vim_buffer_vimgrep.new,
+    qflist_previewer = previewers.vim_buffer_qflist.new,
     -- Developer configurations: Not meant for general override
-    buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
+    buffer_previewer_maker = previewers.buffer_previewer_maker,
   },
 }
 
@@ -75,28 +78,43 @@ M.setup = function()
   -- show project files
   vim.keymap.set("n", "<C-p>", function()
     local opts = {}
-    local ok = pcall(require("telescope.builtin").git_files, opts)
+    local ok = pcall(builtin.git_files, opts)
     if not ok then
-      require("telescope.builtin").find_files(opts)
+      builtin.find_files(opts)
     end
   end)
 
   -- search by characters
   vim.keymap.set("n", "<C-f>", function()
-    require("telescope.builtin").live_grep()
+    builtin.live_grep()
   end)
 
   -- reopen last search
   vim.keymap.set("n", "<C-t><C-t>", function()
-    require("telescope.builtin").resume()
+    builtin.resume()
   end)
 
+  local function buffers_picker()
+    builtin.buffers {
+      attach_mappings = function(prompt_bufnr, map)
+        map("i", "<C-r>", function()
+          local selection = action_state.get_selected_entry()
+          vim.cmd("bd " .. selection.bufnr)
+
+          local current_picker = action_state.get_current_picker(prompt_bufnr)
+          current_picker:refresh(buffers_picker())
+        end)
+        return true
+      end,
+    }
+  end
+
   -- show open buffers
-  vim.keymap.set({ "n", "t" }, "<C-b>", "<cmd>Telescope buffers<cr>")
+  vim.keymap.set({ "n", "t" }, "<C-b>", buffers_picker)
 
   -- show diagnostic issues
   vim.keymap.set("n", "<C-t><C-d>", function()
-    require("telescope.builtin").diagnostics()
+    builtin.diagnostics()
   end)
 end
 
