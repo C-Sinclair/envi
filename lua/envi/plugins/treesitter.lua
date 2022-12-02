@@ -5,7 +5,9 @@ if not present then
 end
 
 local config = {
-  ensure_installed = "all",
+  ensure_installed = {
+    "bash", "css", "eex", "elixir", "erlang", "gleam", "go", "graphql", "heex", "html", "json", "lua", "markdown", "rust", "scss", "sql", "typescript", "vim", "yaml"
+  },
   highlight = {
     enable = true,
     use_languagetree = true,

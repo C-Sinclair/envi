@@ -53,7 +53,7 @@ local servers = {
   "cssls",
   "clojure_lsp",
   "gopls",
-  "tailwindcss",
+  --[[ "tailwindcss", ]]
   "svelte",
   "elmls",
   "rnix",
@@ -76,7 +76,7 @@ lspconfig.elixirls.setup {
   flags = {
     debounce_text_changes = 150,
   },
-  cmd = { "/home/conor/.local/elixir_ls/language_server.sh" },
+  cmd = { vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh" },
 }
 
 --[[
@@ -107,6 +107,10 @@ end)
 vim.keymap.set("n", "<leader>ls", function()
   vim.lsp.buf.signature_help()
 end)
+vim.keymap.set("n", "<leader>cr", vim.lsp.codelens.run, {
+  buffer = true,
+  noremap = true,
+})
 
 -- Formatting
 vim.keymap.set("n", "<leader>lf", fo.format)

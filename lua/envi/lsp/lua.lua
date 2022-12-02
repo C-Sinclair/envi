@@ -1,6 +1,6 @@
 local capabilities = require "envi.lsp.capabilities"
 
-local sumneko_root_path = "/home/conor/Repos/sumneko/lua-language-server"
+local sumneko_root_path = vim.fn.expand "~" .. "/Repos/sumneko/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
 require("neodev").setup {}

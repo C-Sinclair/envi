@@ -564,4 +564,12 @@ return require("packer").startup(function(use)
       "MunifTanjim/nui.nvim",
     },
   } ]]
+
+  use {
+    "mhanberg/elixir.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function() 
+      require("envi.lsp.elixir").setup {}
+    end
+  }
 end)
