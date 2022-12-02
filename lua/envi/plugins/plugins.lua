@@ -568,8 +568,15 @@ return require("packer").startup(function(use)
   use {
     "mhanberg/elixir.nvim",
     requires = { "nvim-lua/plenary.nvim" },
-    config = function() 
+    config = function()
       require("envi.lsp.elixir").setup {}
-    end
+    end,
+  }
+
+  use {
+    "aserowy/tmux.nvim",
+    config = function()
+      require("tmux").setup()
+    end,
   }
 end)

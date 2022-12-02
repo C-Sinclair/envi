@@ -79,10 +79,71 @@ local function display_paths_picker(options)
     :find()
 end
 
+M.elixir_nav = function()
+  local options = {}
+  -- relative to project root
+  local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
+
+  if is_liveview(filepath) then
+    local view_path = view_path_from_liveview(filepath)
+    table.insert(options, { "View", view_path })
+    table.insert(options, { "Test", test_path_from_view(view_path) })
+  elseif is_test(filepath) then
+    local view_path = view_path_from_test(filepath)
+    table.insert(options, { "View", view_path })
+    table.insert(options, { "Liveview", liveview_path_from_view(view_path) })
+  else
+    local view_path = filepath
+    table.insert(options, { "Liveview", liveview_path_from_view(view_path) })
+    table.insert(options, { "Test", test_path_from_view(view_path) })
+  end
+
+  -- TODO: nearest router
+
+  display_paths_picker(options)
+end
+
+local function exec(cmd)
+  local handle = assert(io.popen(cmd))
+  local result = handle:read "*a"
+  handle:close()
+
+  return result
+end
+
+local function get_tmux_beam_window()
+  local result = exec "tmux list-windows -a | rg 'beam.smp' | rg '(.*):(.*):.*' -or '$1:$2'"
+  if not result then
+    error "No IEX window running"
+  end
+  local spl = string.split(result, ":")
+  local session = spl[1]
+  local window = tonumber(spl[2])
+  return session .. ":" .. window
+end
+
+M.send_to_iex = function()
+  -- get visual selection
+  local start_line = vim.api.nvim_buf_get_mark(0, "<")[1]
+  local end_line = vim.api.nvim_buf_get_mark(0, ">")[1]
+
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+
+  -- get tmux pane containing running iex
+  local tmux_window = get_tmux_beam_window()
+
+  -- stream line by line to iex
+  for _, line in ipairs(lines) do
+    exec("tmux send-keys -t " .. tmux_window .. " '" .. line .. "' Enter;")
+  end
+
+  P "Selection sent to IEX"
+end
+
 M.setup = function(opts)
   local elixir = require "elixir"
 
-  local cmd = opts["language_server_cmd"] or vim.fn.expand "%" .. "/bin/elixir-ls/language_server.sh"
+  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh"
 
   elixir.setup {
     cmd = cmd,
@@ -96,42 +157,16 @@ M.setup = function(opts)
   }
 
   -- shortcuts to hop between file tree
+  vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
+  vim.keymap.set("n", "<C-t><C-g>", M.elixir_nav, {})
 
-  -- TODO: router?
-  vim.api.nvim_create_user_command("ElixirNav", function()
-    local current_type = "view"
-    local options = {}
-
-    -- relative to project root
-    local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
-    -- mutable version
-    local viewpath
-
-    if is_liveview(filepath) then
-      current_type = "liveview"
-
-      view_path = view_path_from_liveview(filepath)
-      table.insert(options, { "View", view_path })
-      table.insert(options, { "Test", test_path_from_view(view_path) })
-    elseif is_test(filepath) then
-      current_type = "test"
-
-      view_path = view_path_from_test(filepath)
-      table.insert(options, { "View", view_path })
-      table.insert(options, { "Liveview", liveview_path_from_view(view_path) })
-    else
-      current_type = "view"
-      view_path = filepath
-
-      table.insert(options, { "Liveview", liveview_path_from_view(view_path) })
-      table.insert(options, { "Test", test_path_from_view(view_path) })
-    end
-
-    display_paths_picker(options)
-  end, {})
+  -- dispatch code to a running IEX instance
+  vim.api.nvim_create_user_command("SendToIex", M.send_to_iex, {
+    range = true,
+  })
+  vim.keymap.set("v", "<C-r>", "<cmd>lua require('envi.lsp.elixir').send_to_iex()<cr>", { buffer = true })
 
   -- TODO: fuzzy list of modules
-  -- TODO: send to iex for eval
 end
 
 return M
