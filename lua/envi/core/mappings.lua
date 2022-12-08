@@ -17,6 +17,10 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 -- remove highlights
 vim.keymap.set("n", "<CR>", "<cmd>noh<CR><CR>")
 
+-- centre after half page jump
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
 -- close the quickfix list
 vim.keymap.set("n", "<leader>q", "<cmd>cclose<cr>")
 
