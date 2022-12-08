@@ -513,12 +513,12 @@ return require("packer").startup(function(use)
   use "folke/neodev.nvim"
 
   -- smooth scrolling
-  use {
+  --[[ use {
     "declancm/cinnamon.nvim",
     config = function()
       require("envi.plugins.cinnamon").setup()
     end,
-  }
+  } ]]
 
   -- browser vim!
   -- use {
