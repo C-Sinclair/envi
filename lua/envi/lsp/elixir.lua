@@ -6,6 +6,7 @@ local previewers = require "telescope.previewers"
 local user_config = require("telescope.config").values
 
 local M = {}
+M.__cache = {}
 
 local function is_liveview(filepath)
   return filepath:sub(-9) == "html.heex"
@@ -79,7 +80,7 @@ local function display_paths_picker(options)
     :find()
 end
 
-M.elixir_nav = function()
+function M.elixir_nav()
   local options = {}
   -- relative to project root
   local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
@@ -120,6 +121,57 @@ local function get_tmux_beam_window()
   local session = spl[1]
   local window = tonumber(spl[2])
   return session .. ":" .. window
+end
+
+function M.get_all_modules_list()
+  if M.__cache.all_modules then
+    return M.__cache.all_modules
+  end
+  local result = exec [[ mix eval "
+    Application.load(:platform)
+    {:ok, mod} = :application.get_key(:platform, :modules)
+    IO.puts(mod |>Enum.map(&to_string/1) |> Enum.join(\"\n\"))"
+  ]]
+  local t = string.split(result, "\n")
+  M.__cache.all_modules = t
+  return t
+end
+
+function M.get_all_modules()
+  local mods = M.get_all_modules_list()
+
+  pickers
+    .new({}, {
+      prompt_title = "Application Elixir Modules",
+      finder = finders.new_table {
+        results = mods,
+      },
+      previewer = previewers.new_termopen_previewer {
+        get_command = function(entry)
+          return {
+            "mix",
+            "eval",
+            '"Application.load(:platform); IO.puts(' .. entry.value .. ')"',
+          }
+        end,
+      },
+      attach_mappings = function(prompt_bufnr, map)
+        -- on selection
+        actions.select_default:replace(function()
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          -- TODO: get module file path
+        end)
+        -- open in a vertical split
+        map("i", "<C-v>", function()
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          -- TODO: same as above
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 M.send_to_iex = function()
@@ -165,6 +217,8 @@ M.setup = function(opts)
     range = true,
   })
   vim.keymap.set("v", "<C-r>", "<cmd>lua require('envi.lsp.elixir').send_to_iex()<cr>", { buffer = true })
+
+  vim.keymap.set("n", "<C-t><C-m>", M.get_all_modules, {})
 
   -- TODO: fuzzy list of modules
 end
