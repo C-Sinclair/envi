@@ -42,7 +42,8 @@ vim.opt.updatetime = 250
 -- when cursor reaches end/beginning of line
 vim.opt.whichwrap:append "<>[]hl"
 
-vim.g.mapleader = ";"
+-- space for leader
+vim.g.mapleader = " "
 
 -- disable some builtin vim plugins
 local disabled_built_ins = {

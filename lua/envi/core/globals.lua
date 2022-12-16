@@ -30,3 +30,17 @@ function string:split(delimiter)
   end
   return result
 end
+
+-- [[
+-- Coverts a string to snake_case
+-- @type string
+-- @returns string
+-- ]]
+function string:snake_case()
+  return string
+    .gsub(self, "%f[^%l]%u", "_%1")
+    :gsub("%f[^%a]%d", "_%1")
+    :gsub("%f[^%d]%a", "_%1")
+    :gsub("(%u)(%u%l)", "%1_%2")
+    :lower()
+end

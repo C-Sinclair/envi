@@ -7,11 +7,11 @@ M.setup = function()
   local MiniBuf = require "mini.bufremove"
   MiniBuf.setup {}
   -- hide the current buffer
-  vim.keymap.set("n", "<leader>xs", function()
+  vim.keymap.set("n", "<leader>X", function()
     MiniBuf.unshow()
   end)
   -- close the current buffer
-  vim.keymap.set("n", "<leader>xx", function()
+  vim.keymap.set("n", "<leader>x", function()
     MiniBuf.delete()
   end)
 end

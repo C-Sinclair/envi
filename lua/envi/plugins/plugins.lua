@@ -392,7 +392,7 @@ return require("packer").startup(function(use)
           diffview = true,
         },
       }
-      vim.keymap.set("n", "<leader>gg", neogit.open)
+      vim.keymap.set("n", "<leader>g", neogit.open)
     end,
   }
 

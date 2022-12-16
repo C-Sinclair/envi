@@ -104,6 +104,47 @@ function M.elixir_nav()
   display_paths_picker(options)
 end
 
+function M.elixir_nav_to_test()
+  -- relative to project root
+  local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
+
+  if is_liveview(filepath) then
+    local view_path = view_path_from_liveview(filepath)
+    local test_path = test_path_from_view(view_path)
+    vim.cmd.e(test_path)
+  else
+    local test_path = test_path_from_view(filepath)
+    vim.cmd.e(test_path)
+  end
+end
+
+function M.elixir_nav_to_view()
+  -- relative to project root
+  local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
+
+  if is_liveview(filepath) then
+    local view_path = view_path_from_liveview(filepath)
+    vim.cmd.e(view_path)
+  else
+    local view_path = view_path_from_test(filepath)
+    vim.cmd.e(view_path)
+  end
+end
+
+function M.elixir_nav_to_liveview()
+  -- relative to project root
+  local filepath = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
+
+  if is_test(filepath) then
+    local view_path = view_path_from_test(filepath)
+    local live_path = liveview_path_from_view(view_path)
+    vim.cmd.e(live_path)
+  else
+    local live_path = liveview_path_from_view(filepath)
+    vim.cmd.e(live_path)
+  end
+end
+
 local function exec(cmd)
   local handle = assert(io.popen(cmd))
   local result = handle:read "*a"
@@ -127,17 +168,22 @@ function M.get_all_modules_list()
   if M.__cache.all_modules then
     return M.__cache.all_modules
   end
-  local result = exec [[ mix eval "
-    Application.load(:platform)
+  local result = exec [[ elixir --sname ping --cookie foo --rpc-eval "app@Conors-MBP-2"  '
+    Application.load(:platform) # not actually necessary
     {:ok, mod} = :application.get_key(:platform, :modules)
-    IO.puts(mod |>Enum.map(&to_string/1) |> Enum.join(\"\n\"))"
+    IO.puts(mod |>Enum.map(& &1 |> to_string |> String.replace("Elixir.", "")) |> Enum.join("\n"))'
   ]]
   local t = string.split(result, "\n")
   M.__cache.all_modules = t
   return t
 end
 
+function M.path_from_module(mod)
+  return "lib/" .. mod:gsub("%.", "/"):snake_case() .. ".ex"
+end
+
 function M.get_all_modules()
+  -- TODO: filter out non modules
   local mods = M.get_all_modules_list()
 
   pickers
@@ -148,25 +194,29 @@ function M.get_all_modules()
       },
       previewer = previewers.new_termopen_previewer {
         get_command = function(entry)
-          return {
-            "mix",
-            "eval",
-            '"Application.load(:platform); IO.puts(' .. entry.value .. ')"',
-          }
+          return { "bat", M.path_from_module(entry.value) }
         end,
       },
+      --[[ previewer = previewers.new_buffer_previewer {
+        define_preview = function(_, entry)
+          local filepath = M.path_from_module(entry[1])
+          return filepath
+        end,
+      }, ]]
       attach_mappings = function(prompt_bufnr, map)
         -- on selection
         actions.select_default:replace(function()
           actions.close(prompt_bufnr)
           local selection = action_state.get_selected_entry()
-          -- TODO: get module file path
+          local filepath = M.path_from_module(selection.value[2])
+          vim.cmd.e(filepath)
         end)
         -- open in a vertical split
         map("i", "<C-v>", function()
           actions.close(prompt_bufnr)
           local selection = action_state.get_selected_entry()
-          -- TODO: same as above
+          local filepath = M.path_from_module(selection.value[2])
+          vim.cmd.vs(filepath)
         end)
         return true
       end,
@@ -195,22 +245,18 @@ end
 M.setup = function(opts)
   local elixir = require "elixir"
 
-  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh"
+  --[[ local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh" ]]
 
-  elixir.setup {
-    cmd = cmd,
-
-    settings = elixir.settings {
-      dialyzerEnabled = true,
-      fetchDeps = true,
-      enableTestLenses = true,
-      suggestSpecs = true,
-    },
-  }
+  --[[ require("lspconfig").elixirls.setup {
+    cmd = { cmd },
+  } ]]
 
   -- shortcuts to hop between file tree
   vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
   vim.keymap.set("n", "<C-t><C-g>", M.elixir_nav, {})
+  vim.keymap.set("n", "<leader>t", M.elixir_nav_to_test, {})
+  vim.keymap.set("n", "<leader>v", M.elixir_nav_to_view, {})
+  vim.keymap.set("n", "<leader>lv", M.elixir_nav_to_liveview, {})
 
   -- dispatch code to a running IEX instance
   vim.api.nvim_create_user_command("SendToIex", M.send_to_iex, {
@@ -221,6 +267,17 @@ M.setup = function(opts)
   vim.keymap.set("n", "<C-t><C-m>", M.get_all_modules, {})
 
   -- TODO: fuzzy list of modules
+
+  elixir.setup {
+    --[[ cmd = cmd, ]]
+
+    settings = elixir.settings {
+      dialyzerEnabled = false,
+      fetchDeps = true,
+      enableTestLenses = false,
+      suggestSpecs = false,
+    },
+  }
 end
 
 return M
