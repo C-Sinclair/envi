@@ -111,9 +111,3 @@ end)
 vim.keymap.set("n", "<leader>dF", function()
   vim.diagnostic.goto_prev()
 end)
-
--- Language specific config
-require "envi.lsp.python"
-require "envi.lsp.lua"
-require "envi.lsp.typescript"
-require "envi.lsp.rust"
