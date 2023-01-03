@@ -4,6 +4,7 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local user_config = require("telescope.config").values
+local exec = require "envi.core.exec"
 
 local M = {}
 M.__cache = {}
@@ -145,16 +146,8 @@ function M.elixir_nav_to_liveview()
   end
 end
 
-local function exec(cmd)
-  local handle = assert(io.popen(cmd))
-  local result = handle:read "*a"
-  handle:close()
-
-  return result
-end
-
 local function get_tmux_beam_window()
-  local result = exec "tmux list-windows -a | rg 'beam.smp' | rg '(.*):(.*):.*' -or '$1:$2'"
+  local result = exec.tmux "list-windows -a | rg 'beam.smp' | rg '(.*):(.*):.*' -or '$1:$2'"
   if not result then
     error "No IEX window running"
   end
@@ -168,7 +161,7 @@ function M.get_all_modules_list()
   if M.__cache.all_modules then
     return M.__cache.all_modules
   end
-  local result = exec [[ elixir --sname ping --cookie foo --rpc-eval "app@Conors-MBP-2"  '
+  local result = exec.elixir [[ --sname ping --cookie foo --rpc-eval "app@Conors-MBP-2"  '
     Application.load(:platform) # not actually necessary
     {:ok, mod} = :application.get_key(:platform, :modules)
     IO.puts(mod |>Enum.map(& &1 |> to_string |> String.replace("Elixir.", "")) |> Enum.join("\n"))'
@@ -236,7 +229,7 @@ M.send_to_iex = function()
 
   -- stream line by line to iex
   for _, line in ipairs(lines) do
-    exec("tmux send-keys -t " .. tmux_window .. " '" .. line .. "' Enter;")
+    exec.tmux("send-keys -t " .. tmux_window .. " '" .. line .. "' Enter;")
   end
 
   P "Selection sent to IEX"

@@ -565,13 +565,13 @@ return require("packer").startup(function(use)
     },
   } ]]
 
-  use {
-    "mhanberg/elixir.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("envi.lsp.elixir").setup {}
-    end,
-  }
+  --[[ use { ]]
+  --[[   "mhanberg/elixir.nvim", ]]
+  --[[   requires = { "nvim-lua/plenary.nvim" }, ]]
+  --[[   config = function() ]]
+  --[[     require("envi.lsp.elixir").setup {} ]]
+  --[[   end, ]]
+  --[[ } ]]
 
   use {
     "aserowy/tmux.nvim",

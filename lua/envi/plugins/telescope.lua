@@ -110,6 +110,12 @@ M.setup = function()
   end
 
   -- show open buffers
+  vim.keymap.set({ "n", "t" }, "<leader>b", buffers_picker)
+
+  --[[
+  -- @deprecated
+  -- This was how I did it originally, but it requires a double smash (because of Tmux)
+  --]]
   vim.keymap.set({ "n", "t" }, "<C-b>", buffers_picker)
 
   -- show diagnostic issues
