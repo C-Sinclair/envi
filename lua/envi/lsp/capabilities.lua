@@ -25,4 +25,16 @@ if cmp_nvim_lua_present then
   capabilities = cmp_nvim_lua.update_capabilities(capabilities)
 end
 
-return capabilities
+local function on_attach(client, bufnr)
+  client.server_capabilities.document_formatting = false
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+
+  local success, lsp_status = pcall(require, "lsp-status")
+  if success then
+    lsp_status.on_attach(client)
+  end
+end
+
+return capabilities, on_attach

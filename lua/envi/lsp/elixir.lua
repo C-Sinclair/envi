@@ -4,7 +4,9 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local user_config = require("telescope.config").values
+local lspconfig = require "lspconfig"
 local exec = require "envi.core.exec"
+local capabilities = require "envi.lsp.capabilities"
 
 local M = {}
 M.__cache = {}
@@ -236,13 +238,15 @@ M.send_to_iex = function()
 end
 
 M.setup = function(opts)
-  local elixir = require "elixir"
+  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh"
 
-  --[[ local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh" ]]
-
-  --[[ require("lspconfig").elixirls.setup {
+  lspconfig.elixirls.setup {
+    capabilities = capabilities,
+    flags = {
+      debounce_text_changes = 150,
+    },
     cmd = { cmd },
-  } ]]
+  }
 
   -- shortcuts to hop between file tree
   vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
@@ -258,19 +262,6 @@ M.setup = function(opts)
   vim.keymap.set("v", "<C-r>", "<cmd>lua require('envi.lsp.elixir').send_to_iex()<cr>", { buffer = true })
 
   vim.keymap.set("n", "<C-t><C-m>", M.get_all_modules, {})
-
-  -- TODO: fuzzy list of modules
-
-  elixir.setup {
-    --[[ cmd = cmd, ]]
-
-    settings = elixir.settings {
-      dialyzerEnabled = false,
-      fetchDeps = true,
-      enableTestLenses = false,
-      suggestSpecs = false,
-    },
-  }
 end
 
 return M

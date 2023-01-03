@@ -1,5 +1,5 @@
 local lspconfig = require "lspconfig"
-local capabilities = require "envi.lsp.capabilities"
+local capabilities, on_attach = require "envi.lsp.capabilities"
 local fo = require "envi.lsp.formatting"
 
 vim.fn.sign_define(
@@ -37,16 +37,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   update_in_insert = true,
 })
 
-local function on_attach(client, bufnr)
-  client.server_capabilities.document_formatting = false
-
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  local lsp_status = require "lsp-status"
-  lsp_status.on_attach(client)
-end
-
 -- lspservers with default config
 local servers = {
   "html",
@@ -69,15 +59,6 @@ for _, lsp in ipairs(servers) do
     },
   }
 end
-
-lspconfig.elixirls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags = {
-    debounce_text_changes = 150,
-  },
-  cmd = { vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh" },
-}
 
 --[[
   LSP related keymaps
