@@ -85,9 +85,11 @@ lspconfig.elixirls.setup {
 
 vim.keymap.set("n", "gd", function()
   vim.lsp.buf.definition()
+  vim.cmd.norm [[ zz ]]
 end)
 vim.keymap.set("n", "gv", function()
   require("telescope.builtin").lsp_definitions { jump_type = "vsplit" }
+  vim.cmd.norm [[ zz ]]
 end)
 vim.keymap.set("n", "K", function()
   vim.lsp.buf.hover()
