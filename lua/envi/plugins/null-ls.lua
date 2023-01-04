@@ -53,9 +53,14 @@ local sources = {
   b.diagnostics.zsh,
   b.formatting.beautysh,
   -- b.formatting.shfmt,
+  -- Fish
+  b.diagnostics.fish,
+  b.formatting.fish_indent,
   -- b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
   -- Github Action
   b.diagnostics.actionlint,
+  -- Elixir
+  b.diagnostics.credo,
 }
 
 local M = {}

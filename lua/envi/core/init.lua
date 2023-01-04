@@ -1,5 +1,3 @@
-local shadafile = vim.opt.shadafile
-
 vim.opt.title = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cmdheight = 1
@@ -72,6 +70,8 @@ for _, plugin in pairs(disabled_built_ins) do
 end
 
 --Defer loading shada until after startup_
+local shadafile = vim.opt.shadafile
+
 vim.opt.shadafile = "NONE"
 vim.schedule(function()
   vim.opt.shadafile = shadafile
