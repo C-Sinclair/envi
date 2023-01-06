@@ -22,7 +22,7 @@ local sources = {
   },
   --[[ b.code_actions.xo, ]]
   --[[ b.diagnostics.xo, ]]
-  b.diagnostics.eslint_d,
+  --[[ b.diagnostics.eslint_d, ]]
   --[[ b.formatting.deno_fmt, ]]
   -- JSON
   b.diagnostics.jsonlint,

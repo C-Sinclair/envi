@@ -13,7 +13,8 @@ M.setup = function()
     history = true,
 
     -- Update snippet text in _real time_
-    updateevents = "TextChanged,TextChangedI",
+    update_events = "TextChanged,TextChangedI",
+    delete_check_events = "TextChanged",
 
     -- Show virtual text hints for node types
     ext_opts = {
@@ -28,6 +29,8 @@ M.setup = function()
         },
       },
     },
+    -- So that Treesitter determines the grammar
+    ft_func = require("luasnip.extras.filetype_functions").from_cursor,
   }
   ls.config.set_config(config)
 
