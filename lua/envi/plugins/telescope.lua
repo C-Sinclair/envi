@@ -5,8 +5,12 @@ end
 
 local builtin = require "telescope.builtin"
 local sorters = require "telescope.sorters"
+local pickers = require "telescope.pickers"
+local finders = require "telescope.finders"
 local previewers = require "telescope.previewers"
+local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
+local exec = require "envi.core.exec"
 
 local config = {
   defaults = {
@@ -77,11 +81,8 @@ M.setup = function()
 
   -- show project files
   vim.keymap.set("n", "<C-p>", function()
-    local opts = {}
-    local ok = pcall(builtin.git_files, opts)
-    if not ok then
-      builtin.find_files(opts)
-    end
+    -- TODO: add custom language type filters
+    builtin.find_files {}
   end)
 
   -- search by characters
@@ -122,6 +123,39 @@ M.setup = function()
   vim.keymap.set("n", "<C-t><C-d>", function()
     builtin.diagnostics()
   end)
+
+  local function pr_files_picker()
+    -- TODO: fix this command so it actually works 💩
+    local results = exec.fish [[-c "wait (gh pr view --json files --jq '.files.[].path')"]]
+    pickers
+      .new({}, {
+        prompt_title = "PR Files",
+        finder = finders.new_table {
+          results = results,
+        },
+        previewer = previewers.new_buffer_previewer {},
+        attach_mappings = function(prompt_bufnr, map)
+          -- on selection
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            local filepath = M.path_from_module(selection.value[2])
+            vim.cmd.e(filepath)
+          end)
+          -- open in a vertical split
+          map("i", "<C-v>", function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            local filepath = M.path_from_module(selection.value[2])
+            vim.cmd.vs(filepath)
+          end)
+          return true
+        end,
+      })
+      :find()
+  end
+
+  vim.api.nvim_create_user_command("PrFiles", pr_files_picker, {})
 end
 
 return M

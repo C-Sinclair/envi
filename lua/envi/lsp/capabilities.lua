@@ -1,7 +1,6 @@
 --[[
 -- General capabilities shared across all language servers
 --]]
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 capabilities.textDocument.completion.completionItem.documentationFormat = { "markdown", "plaintext" }
@@ -21,7 +20,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 
 local cmp_nvim_lua_present, cmp_nvim_lua = pcall(require, "cmp_nvim_lua")
-if cmp_nvim_lua_present then
+if cmp_nvim_lua_present and cmp_nvim_lua then
   capabilities = cmp_nvim_lua.update_capabilities(capabilities)
 end
 

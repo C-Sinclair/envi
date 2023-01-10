@@ -48,6 +48,7 @@ local servers = {
   "elmls",
   "rnix",
   "hls",
+  "ccls",
 }
 
 for _, lsp in ipairs(servers) do
