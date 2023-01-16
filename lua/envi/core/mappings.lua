@@ -17,6 +17,9 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 -- remove highlights
 vim.keymap.set("n", "<CR>", "<cmd>noh<CR><CR>")
 
+-- redo as inverse of undo
+vim.keymap.set("n", "U", "<C-r>")
+
 -- centre after half page jump
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")

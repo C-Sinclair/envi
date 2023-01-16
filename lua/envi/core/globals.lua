@@ -9,6 +9,16 @@ function R(module)
   return require(module)
 end
 
+-- gets current file path (relative to project)
+function Filepath()
+  local path = vim.fn.fnamemodify(vim.fn.expand "%", ":p:~:.")
+  -- copy to clipboard
+  vim.cmd.call("setreg('*', '" .. path .. "')")
+  P(path)
+  return path
+end
+vim.api.nvim_create_user_command("Filepath", Filepath, {})
+
 --[[
 -- Split a string by a delimiter 
 -- @param string delimiter - what to split by
