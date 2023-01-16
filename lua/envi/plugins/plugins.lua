@@ -78,7 +78,6 @@ return require("packer").startup(function(use)
   -- git stuff
   use {
     "lewis6991/gitsigns.nvim",
-    opt = true,
     config = function()
       require("envi.plugins.gitsigns").setup()
     end,
@@ -593,6 +592,13 @@ return require("packer").startup(function(use)
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       }
+    end,
+  }
+
+  use {
+    "echasnovski/mini.move",
+    config = function()
+      require("mini.move").setup {}
     end,
   }
 end)
