@@ -4,9 +4,46 @@ if not present then
   return
 end
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+-- Install custom Tera parser
+parser_config.tera = {
+  install_info = {
+    url = "~/Repos/C-Sinclair/tree-sitter-tera",
+    files = { "src/parser.c" },
+  },
+  filetype = "tera",
+}
+
+-- Force file types
+vim.filetype.add {
+  pattern = {
+    ["templates/.*.html"] = "tera",
+    ["templates/.*/.*.html"] = "tera",
+  },
+}
+
 local config = {
   ensure_installed = {
-    "bash", "css", "eex", "elixir", "erlang", "gleam", "go", "graphql", "heex", "html", "json", "lua", "markdown", "rust", "scss", "sql", "typescript", "vim", "yaml"
+    "bash",
+    "css",
+    "eex",
+    "elixir",
+    "erlang",
+    "gleam",
+    "go",
+    "graphql",
+    "heex",
+    "html",
+    "json",
+    "lua",
+    "markdown",
+    "rust",
+    "scss",
+    "sql",
+    "typescript",
+    "vim",
+    "yaml",
   },
   highlight = {
     enable = true,
@@ -59,7 +96,7 @@ local config = {
   },
 }
 
-vim.cmd 'autocmd BufRead,BufNewFile *.nomad set filetype=hcl'
+vim.cmd "autocmd BufRead,BufNewFile *.nomad set filetype=hcl"
 
 local M = {}
 
