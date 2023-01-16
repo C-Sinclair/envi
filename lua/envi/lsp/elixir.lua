@@ -219,26 +219,8 @@ function M.get_all_modules()
     :find()
 end
 
-M.send_to_iex = function()
-  -- get visual selection
-  local start_line = vim.api.nvim_buf_get_mark(0, "<")[1]
-  local end_line = vim.api.nvim_buf_get_mark(0, ">")[1]
-
-  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-
-  -- get tmux pane containing running iex
-  local tmux_window = get_tmux_beam_window()
-
-  -- stream line by line to iex
-  for _, line in ipairs(lines) do
-    exec.tmux("send-keys -t " .. tmux_window .. " '" .. line .. "' Enter;")
-  end
-
-  P "Selection sent to IEX"
-end
-
 M.setup = function(opts)
-  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls/language_server.sh"
+  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls"
 
   lspconfig.elixirls.setup {
     capabilities = capabilities,
@@ -250,18 +232,12 @@ M.setup = function(opts)
 
   -- shortcuts to hop between file tree
   vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
-  vim.keymap.set("n", "<C-t><C-g>", M.elixir_nav, {})
-  vim.keymap.set("n", "<leader>t", M.elixir_nav_to_test, {})
-  vim.keymap.set("n", "<leader>v", M.elixir_nav_to_view, {})
-  vim.keymap.set("n", "<leader>lv", M.elixir_nav_to_liveview, {})
+  vim.keymap.set("n", "<leader>tg", M.elixir_nav, {})
+  vim.keymap.set("n", "<leader>nt", M.elixir_nav_to_test, {})
+  vim.keymap.set("n", "<leader>nv", M.elixir_nav_to_view, {})
+  vim.keymap.set("n", "<leader>nl", M.elixir_nav_to_liveview, {})
 
-  -- dispatch code to a running IEX instance
-  vim.api.nvim_create_user_command("SendToIex", M.send_to_iex, {
-    range = true,
-  })
-  vim.keymap.set("v", "<C-r>", "<cmd>lua require('envi.lsp.elixir').send_to_iex()<cr>", { buffer = true })
-
-  vim.keymap.set("n", "<C-t><C-m>", M.get_all_modules, {})
+  vim.keymap.set("n", "<leader>tm", M.get_all_modules, {})
 end
 
 return M
