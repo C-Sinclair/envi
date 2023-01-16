@@ -253,6 +253,13 @@ return require("packer").startup(function(use)
       require("telescope").load_extension "dap"
     end,
   }
+  use {
+    "natecraddock/telescope-zf-native.nvim",
+    requires = { "nvim-telescope/telescope.nvim" },
+    config = function()
+      require("telescope").load_extension "zf-native"
+    end,
+  }
 
   -- time tracking
   use { "wakatime/vim-wakatime" }
@@ -568,9 +575,24 @@ return require("packer").startup(function(use)
   --[[ } ]]
 
   use {
-    "aserowy/tmux.nvim",
+    "~/Repos/C-Sinclair/iex.nvim",
     config = function()
-      require("tmux").setup()
+      require("iex").setup {
+        --[[ debug = true, ]]
+      }
+    end,
+  }
+
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
     end,
   }
 end)
