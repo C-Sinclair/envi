@@ -80,18 +80,27 @@ M.setup = function()
   --]]
 
   -- show project files
+  vim.keymap.set("n", "<leader>/", function()
+    builtin.find_files {}
+  end)
+  ---@deprecated This was how I did it originally, but it requires a double smash (because of Tmux)
   vim.keymap.set("n", "<C-p>", function()
     -- TODO: add custom language type filters
     builtin.find_files {}
   end)
 
+  -- show recent files
+  vim.keymap.set("n", "<leader>o", function()
+    builtin.oldfiles {}
+  end)
+
   -- search by characters
-  vim.keymap.set("n", "<C-f>", function()
+  vim.keymap.set("n", "<leader>f", function()
     builtin.live_grep()
   end)
 
   -- reopen last search
-  vim.keymap.set("n", "<C-t><C-t>", function()
+  vim.keymap.set("n", "<leader>tt", function()
     builtin.resume()
   end)
 
@@ -113,14 +122,8 @@ M.setup = function()
   -- show open buffers
   vim.keymap.set({ "n", "t" }, "<leader>b", buffers_picker)
 
-  --[[
-  -- @deprecated
-  -- This was how I did it originally, but it requires a double smash (because of Tmux)
-  --]]
-  vim.keymap.set({ "n", "t" }, "<C-b>", buffers_picker)
-
   -- show diagnostic issues
-  vim.keymap.set("n", "<C-t><C-d>", function()
+  vim.keymap.set("n", "<leader>td", function()
     builtin.diagnostics()
   end)
 
