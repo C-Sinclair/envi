@@ -601,4 +601,18 @@ return require("packer").startup(function(use)
       require("mini.move").setup {}
     end,
   }
+
+  use {
+    "~/Repos/C-Sinclair/nvim-recorder",
+    config = function()
+      require("recorder").setup()
+    end,
+  }
+
+  use {
+    "zdcthomas/yop.nvim",
+    config = function()
+      require("envi.plugins.yop").setup()
+    end,
+  }
 end)
