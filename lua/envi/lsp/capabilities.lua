@@ -1,7 +1,27 @@
 --[[
 -- General capabilities shared across all language servers
 --]]
+
+local function on_attach(client, bufnr)
+  client.server_capabilities.document_formatting = false
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+
+  local success, lsp_status = pcall(require, "lsp-status")
+  if success then
+    lsp_status.on_attach(client)
+  end
+end
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+local cmp_present, cmp = pcall(require, "cmp_nvim_lsp")
+if not cmp_present then
+  return capabilities, on_attach
+end
+
+capabilities = cmp.default_capabilities()
 
 capabilities.textDocument.completion.completionItem.documentationFormat = { "markdown", "plaintext" }
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -18,22 +38,5 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     "additionalTextEdits",
   },
 }
-
-local cmp_nvim_lua_present, cmp_nvim_lua = pcall(require, "cmp_nvim_lua")
-if cmp_nvim_lua_present and cmp_nvim_lua then
-  capabilities = cmp_nvim_lua.update_capabilities(capabilities)
-end
-
-local function on_attach(client, bufnr)
-  client.server_capabilities.document_formatting = false
-
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  local success, lsp_status = pcall(require, "lsp-status")
-  if success then
-    lsp_status.on_attach(client)
-  end
-end
 
 return capabilities, on_attach

@@ -43,7 +43,6 @@ local servers = {
   "cssls",
   "clojure_lsp",
   "gopls",
-  --[[ "tailwindcss", ]]
   "svelte",
   "elmls",
   "rnix",
@@ -65,29 +64,16 @@ end
   LSP related keymaps
   --]]
 
-vim.keymap.set("n", "gd", function()
-  vim.lsp.buf.definition()
-  vim.cmd.norm [[ zz ]]
-end)
-vim.keymap.set("n", "gv", function()
-  require("telescope.builtin").lsp_definitions { jump_type = "vsplit" }
-  vim.cmd.norm [[ zz ]]
-end)
-vim.keymap.set("n", "K", function()
-  vim.lsp.buf.hover()
-end)
-vim.keymap.set("n", "gK", function()
-  vim.lsp.buf.hover()
-end)
-vim.keymap.set("n", "<leader>lR", function()
-  vim.lsp.buf.rename()
-end)
+vim.keymap.set("n", "gd", "<cmd>Lspsaga goto_definition<CR>")
+vim.keymap.set("n", "gv", "<cmd>Lspsaga peek_definition<CR>")
+vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>")
+vim.keymap.set("n", "L", "<cmd>Lspsaga lsp_finder<CR>")
+vim.keymap.set("n", "<C-K>", "<cmd>Lspsaga hover_doc ++keep<CR>")
+vim.keymap.set("n", "<leader>lR", "<cmd>Lspsaga rename<CR>")
 vim.keymap.set("n", "<leader>lr", function()
   vim.lsp.buf.references()
 end)
-vim.keymap.set("n", "<leader>lc", function()
-  vim.lsp.buf.code_action()
-end)
+vim.keymap.set("n", "<leader>lc", "<cmd>Lspsaga code_action<CR>")
 vim.keymap.set("n", "<leader>ls", function()
   vim.lsp.buf.signature_help()
 end)
@@ -100,15 +86,14 @@ vim.keymap.set("n", "<leader>cr", vim.lsp.codelens.run, {
 vim.keymap.set("n", "<leader>lf", fo.format)
 
 -- Open Diagnostics
-vim.keymap.set("n", "<leader>de", function()
-  vim.diagnostic.open_float()
-end)
-vim.keymap.set("n", "<leader>dd", function()
-  require("telescope.builtin").diagnostics()
-end)
-vim.keymap.set("n", "<leader>df", function()
-  vim.diagnostic.goto_next()
-end)
-vim.keymap.set("n", "<leader>dF", function()
-  vim.diagnostic.goto_prev()
-end)
+vim.keymap.set("n", "<leader>de", "<cmd>Lspsaga show_cursor_diagnostics ++unfocus<CR>")
+vim.keymap.set("n", "<leader>df", "<cmd>Lspsaga diagnostic_jump_next<CR>")
+vim.keymap.set("n", "<leader>dF", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
+
+vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>")
+
+-- load language servers
+require "envi.lsp.typescript"
+require "envi.lsp.rust"
+require "envi.lsp.python"
+require "envi.lsp.lua"

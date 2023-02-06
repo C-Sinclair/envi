@@ -27,7 +27,7 @@ local sources = {
   -- JSON
   b.diagnostics.jsonlint,
   -- Tailwind
-  -- b.formatting.rustywind,
+  b.formatting.rustywind,
   -- Python
   b.formatting.black.with { extra_args = { "--line-length=99" } },
   b.diagnostics.flake8.with { extra_args = { "--max-line-length=99" } },
@@ -61,6 +61,9 @@ local sources = {
   b.diagnostics.actionlint,
   -- Elixir
   b.diagnostics.credo,
+  -- HTML
+  b.diagnostics.curlylint,
+  b.formatting.djhtml,
 }
 
 local M = {}

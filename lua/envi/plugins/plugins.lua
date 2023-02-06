@@ -17,7 +17,18 @@ return require("packer").startup(function(use)
   use "lewis6991/impatient.nvim"
 
   -- a better & faster filetype plugin
-  use { "nathom/filetype.nvim" }
+  use {
+    "nathom/filetype.nvim",
+    config = function()
+      require("filetype").setup {
+        complex = {
+          -- handle blog tera templates
+          ["templates/*.html"] = "htmldjango",
+          ["templates/**/*.html"] = "htmldjango",
+        },
+      }
+    end,
+  }
 
   -- icons!
   use {
@@ -86,6 +97,14 @@ return require("packer").startup(function(use)
   -- lsp stuff
   use "neovim/nvim-lspconfig"
 
+  use {
+    "glepnir/lspsaga.nvim",
+    branch = "main",
+    config = function()
+      require("lspsaga").setup {}
+    end,
+    requires = { { "nvim-tree/nvim-web-devicons" } },
+  }
   -- use {
   --   "m-demare/hlargs.nvim",
   --   requires = { "nvim-treesitter/nvim-treesitter" },
@@ -110,6 +129,17 @@ return require("packer").startup(function(use)
     as = "lsp-status",
     config = function()
       require("envi.plugins.lsp_status").setup()
+    end,
+  }
+
+  use {
+    "themaxmarchuk/tailwindcss-colors.nvim",
+    -- load only on require("tailwindcss-colors")
+    module = "tailwindcss-colors",
+    -- run the setup function after plugin is loaded
+    config = function()
+      -- pass config options here (or nothing to use defaults)
+      require("tailwindcss-colors").setup()
     end,
   }
 
@@ -202,9 +232,11 @@ return require("packer").startup(function(use)
   -- starting dashboard
   use {
     "glepnir/dashboard-nvim",
+    event = "VimEnter",
     config = function()
       require("envi.plugins.dashboard").setup()
     end,
+    requires = { "nvim-tree/nvim-web-devicons" },
   }
 
   -- comments

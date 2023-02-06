@@ -2,9 +2,6 @@
 Core VIM keymaps 
 --]]
 
--- dont yank on paste
-vim.keymap.set("v", "p", '"dp')
-
 -- yank from current cursor to end of line
 vim.keymap.set("n", "Y", "yg$")
 

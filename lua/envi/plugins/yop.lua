@@ -6,7 +6,7 @@ function M.setup()
     return
   end
 
-  yop.op_map({ "n", "v" }, "<C-a>", function(lines)
+  yop.op_map({ "n", "v" }, "<M-a>", function(lines)
     -- Multiple lines can't be searched for
     if #lines > 1 then
       return

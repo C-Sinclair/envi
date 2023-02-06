@@ -36,7 +36,7 @@ local config = {
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.close(),
-    ["<CR>"] = cmp.mapping.confirm {
+    ["<C-CR>"] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
@@ -81,12 +81,13 @@ M.setup = function()
   cmp.setup(config)
 
   -- `/` cmdline setup.
-  cmp.setup.cmdline("/", {
+  cmp.setup.cmdline({ "/", "?" }, {
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
   })
+
   -- `:` cmdline setup.
   cmp.setup.cmdline(":", {
     mapping = cmp.mapping.preset.cmdline(),

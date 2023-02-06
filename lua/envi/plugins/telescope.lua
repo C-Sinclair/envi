@@ -90,7 +90,7 @@ M.setup = function()
   end)
 
   -- show recent files
-  vim.keymap.set("n", "<leader>o", function()
+  vim.keymap.set("n", "<leader>to", function()
     builtin.oldfiles {}
   end)
 

@@ -9,3 +9,6 @@ vim.api.nvim_create_user_command("EnviReload", function()
   end
   R("envi").setup()
 end, {})
+
+-- invoke local init.lua if present
+pcall(require, "init")
