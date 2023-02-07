@@ -4,9 +4,7 @@ local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local user_config = require("telescope.config").values
-local lspconfig = require "lspconfig"
 local exec = require "envi.core.exec"
-local capabilities = require "envi.lsp.capabilities"
 
 local M = {}
 M.__cache = {}
@@ -219,17 +217,7 @@ function M.get_all_modules()
     :find()
 end
 
-M.setup = function(opts)
-  local cmd = opts["language_server_cmd"] or vim.fn.expand "~" .. "/bin/elixir-ls"
-
-  lspconfig.elixirls.setup {
-    capabilities = capabilities,
-    flags = {
-      debounce_text_changes = 150,
-    },
-    cmd = { cmd },
-  }
-
+M.setup = function()
   -- shortcuts to hop between file tree
   vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
   vim.keymap.set("n", "<leader>tg", M.elixir_nav, {})

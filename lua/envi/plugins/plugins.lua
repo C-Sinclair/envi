@@ -94,8 +94,89 @@ return require("packer").startup(function(use)
     end,
   }
 
+  -- manage lsp servers and 3rd party deps
+  use {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  }
+
+  use {
+    "williamboman/mason-lspconfig.nvim",
+    requires = {
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig",
+    },
+    config = function()
+      require("mason-lspconfig").setup {
+        ensure_installed = {
+          "sumneko_lua",
+          "rust_analyzer",
+          "bashls",
+          "cssls",
+          "eslint",
+          "elixirls",
+          "elmls",
+          "gopls",
+          "html",
+          "tsserver",
+          "jsonls",
+          "rnix",
+          "tailwindcss",
+          "teal_ls",
+          "zls",
+        },
+      }
+    end,
+  }
+  use {
+    "jay-babu/mason-null-ls.nvim",
+    requires = {
+      "williamboman/mason.nvim",
+      "jose-elias-alvarez/null-ls.nvim",
+    },
+    config = function()
+      require("mason-null-ls").setup {
+        ensure_installed = {
+          "jsonlint",
+          "rustywind",
+          "black",
+          "flake8",
+          "stylua",
+          "luacheck",
+          "cljstyle",
+          "fnlfmt",
+          "gofmt",
+          "markdownlint",
+          "prismaFmt",
+          "rustfmt",
+          "stylish_haskell",
+          "zsh",
+          "beautyzsh",
+          "fish",
+          "fish_indent",
+          "actionlint",
+          "credo",
+          "curlylint",
+          "djhtml",
+          "jq",
+        },
+      }
+    end,
+  }
+
   -- lsp stuff
   use "neovim/nvim-lspconfig"
+
+  -- formatting
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
+    after = "nvim-lspconfig",
+    config = function()
+      require("envi.plugins.null-ls").setup()
+    end,
+  }
 
   use {
     "glepnir/lspsaga.nvim",
@@ -105,13 +186,6 @@ return require("packer").startup(function(use)
     end,
     requires = { { "nvim-tree/nvim-web-devicons" } },
   }
-  -- use {
-  --   "m-demare/hlargs.nvim",
-  --   requires = { "nvim-treesitter/nvim-treesitter" },
-  --   config = function()
-  --     require("hlargs").setup()
-  --   end,
-  -- }
 
   -- function signatures in lsp
   use {
@@ -243,7 +317,7 @@ return require("packer").startup(function(use)
   use {
     "numToStr/Comment.nvim",
     module = "Comment",
-    keys = { "gcc" },
+    keys = { "gcc", "gcb" },
     config = function()
       require("envi.plugins.comment").setup()
     end,
@@ -265,25 +339,6 @@ return require("packer").startup(function(use)
     end,
   }
 
-  -- search node_modules
-  use {
-    "nvim-telescope/telescope-node-modules.nvim",
-    requires = { "nvim-telescope/telescope.nvim" },
-  }
-
-  -- search emojis
-  use {
-    "xiyaowong/telescope-emoji.nvim",
-    requires = { "nvim-telescope/telescope.nvim" },
-  }
-
-  use {
-    "nvim-telescope/telescope-dap.nvim",
-    requires = { "nvim-telescope/telescope.nvim" },
-    config = function()
-      require("telescope").load_extension "dap"
-    end,
-  }
   use {
     "natecraddock/telescope-zf-native.nvim",
     requires = { "nvim-telescope/telescope.nvim" },
@@ -294,16 +349,6 @@ return require("packer").startup(function(use)
 
   -- time tracking
   use { "wakatime/vim-wakatime" }
-
-  -- formatting
-  use {
-    "jose-elias-alvarez/null-ls.nvim",
-    after = "nvim-lspconfig",
-    config = function()
-      require("envi.plugins.null-ls").setup()
-    end,
-  }
-  use "sbdchd/neoformat"
 
   -- different way of marking files
   use {
@@ -316,24 +361,6 @@ return require("packer").startup(function(use)
       require("telescope").load_extension "harpoon"
     end,
   }
-
-  -- AI code completion
-  -- use {
-  --   "github/copilot.vim",
-  --   config = function()
-  --     require("envi.plugins.copilot").setup()
-  --   end,
-  -- }
-
-  -- interactive LISPs and such
-  -- use {
-  --   "Olical/conjure",
-  --   config = function()
-  --     require("envi.plugins.conjure").setup()
-  --   end,
-  -- }
-  --
-  -- use "tpope/vim-sexp-mappings-for-regular-people"
 
   -- file explorer
   use {
@@ -371,22 +398,6 @@ return require("packer").startup(function(use)
     end,
     -- some optional icons
     requires = { "kyazdani42/nvim-web-devicons" },
-  }
-  --[[ use {
-    "nvim-lualine/lualine.nvim",
-    after = "catppuccin",
-    config = function()
-      require("envi.plugins.lualine").setup()
-    end,
-  } ]]
-
-  -- symbols tree viewer
-  use {
-    "simrat39/symbols-outline.nvim",
-    after = "nvim-treesitter",
-    config = function()
-      require("envi.plugins.symbols").setup()
-    end,
   }
 
   -- todo comments
@@ -433,24 +444,6 @@ return require("packer").startup(function(use)
       vim.keymap.set("n", "<leader>g", neogit.open)
     end,
   }
-
-  -- nvim debugger
-  use {
-    "mfussenegger/nvim-dap",
-    config = function()
-      require "envi.plugins.dap"
-    end,
-  }
-  use {
-    "theHamsta/nvim-dap-virtual-text",
-    requires = "mfussenegger/nvim-dap",
-    config = function()
-      require("nvim-dap-virtual-text").setup()
-    end,
-  }
-  use { "mfussenegger/nvim-dap-python", requires = "mfussenegger/nvim-dap" }
-  -- use "mfussenegger/nvim-dap-go"
-  use "rcarriga/nvim-dap-ui"
 
   use "simrat39/rust-tools.nvim"
 
@@ -522,43 +515,10 @@ return require("packer").startup(function(use)
     end,
   }
 
-  -- stylish buffer switching
-  use {
-    "ghillb/cybu.nvim",
-    branch = "main",
-    requires = { "kyazdani42/nvim-web-devicons" },
-    config = function()
-      local ok, cybu = pcall(require, "cybu")
-      if not ok then
-        return
-      end
-      cybu.setup()
-      vim.keymap.set("n", "<c-w>N", "<cmd>CybuPrev<cr>")
-      vim.keymap.set("n", "<c-w>n", "<cmd>CybuNext<cr>")
-      vim.keymap.set("n", "<c-w><tab>", "<cmd>CybuLastusedNext<cr>")
-    end,
-  }
-
   -- lua help inside vim
   use "milisims/nvim-luaref"
 
   use "folke/neodev.nvim"
-
-  -- smooth scrolling
-  --[[ use {
-    "declancm/cinnamon.nvim",
-    config = function()
-      require("envi.plugins.cinnamon").setup()
-    end,
-  } ]]
-
-  -- browser vim!
-  -- use {
-  -- "glacambre/firenvim",
-  -- run = function()
-  -- vim.fn["firenvim#install"](0)
-  -- end,
-  -- }
 
   -- whole load of nvim extension goodness
   use {
@@ -586,34 +546,6 @@ return require("packer").startup(function(use)
     end,
   }
 
-  --[[ use {
-    "folke/noice.nvim",
-    event = "VimEnter",
-    config = function()
-      require("noice").setup()
-    end,
-    requires = {
-      "MunifTanjim/nui.nvim",
-    },
-  } ]]
-
-  --[[ use { ]]
-  --[[   "mhanberg/elixir.nvim", ]]
-  --[[   requires = { "nvim-lua/plenary.nvim" }, ]]
-  --[[   config = function() ]]
-  --[[     require("envi.lsp.elixir").setup {} ]]
-  --[[   end, ]]
-  --[[ } ]]
-
-  use {
-    "~/Repos/C-Sinclair/iex.nvim",
-    config = function()
-      require("iex").setup {
-        --[[ debug = true, ]]
-      }
-    end,
-  }
-
   use {
     "folke/which-key.nvim",
     config = function()
@@ -624,20 +556,6 @@ return require("packer").startup(function(use)
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       }
-    end,
-  }
-
-  use {
-    "echasnovski/mini.move",
-    config = function()
-      require("mini.move").setup {}
-    end,
-  }
-
-  use {
-    "~/Repos/C-Sinclair/nvim-recorder",
-    config = function()
-      require("recorder").setup()
     end,
   }
 

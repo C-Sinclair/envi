@@ -1,1 +1,1 @@
-require("envi.lsp.elixir").setup {}
+require("envi.lsp.elixir").setup()

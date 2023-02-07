@@ -8,7 +8,6 @@ function M.setup()
   require "envi.core"
   require "envi.core.mappings"
   require "envi.core.globals"
-  require "envi.core.autocmds"
   require "envi.core.git"
 
   -- load lsp specific functionality
