@@ -15,6 +15,14 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
+if lsp_status_present then
+  capabilities = vim.tbl_extend("keep", capabilities, lsp_status.capabilities)
+end
+
+if cmp_present then
+  capabilities = vim.tbl_extend("keep", capabilities, cmp.default_capabilities())
+end
+
 capabilities.textDocument.completion.completionItem.documentationFormat = { "markdown", "plaintext" }
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.preselectSupport = true
@@ -31,13 +39,17 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
   },
 }
 
-if lsp_status_present then
-  capabilities = vim.tbl_extend("keep", capabilities, lsp_status.capabilities)
-end
+capabilities.workspace.symbol.dynamicRegistration = true
+capabilities.workspace.semanticTokens.dynamicRegistration = true
 
-if cmp_present then
-  capabilities = vim.tbl_extend("keep", capabilities, cmp.default_capabilities())
-end
+capabilities.textDocument.hover.dynamicRegistration = true
+capabilities.textDocument.completion.dynamicRegistration = true
+capabilities.textDocument.callHierarchy.dynamicRegistration = true
+capabilities.textDocument.signatureHelp.dynamicRegistration = true
+capabilities.textDocument.documentSymbol.dynamicRegistration = true
+capabilities.textDocument.semanticTokens.dynamicRegistration = true
+capabilities.textDocument.synchronization.dynamicRegistration = true
+capabilities.textDocument.documentHighlight.dynamicRegistration = true
 
 vim.fn.sign_define(
   "DiagnosticSignError",
@@ -98,16 +110,53 @@ local mason = require "mason-lspconfig"
 
 mason.setup_handlers {
   default_handler,
+  ["elixirls"] = function()
+    lspconfig.elixirls.setup {
+      cmd = { vim.fn.stdpath "data" .. "/mason/bin/elixir-ls" },
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }
+  end,
   ["tsserver"] = function()
     require("typescript").setup {}
   end,
   ["tailwindcss"] = function()
     lspconfig.tailwindcss.setup {
+      cmd = { vim.fn.stdpath "data" .. "/mason/bin/tailwindcss-language-server" },
       on_attach = function(client, bufnr)
         require("tailwindcss-colors").buf_attach(bufnr)
         on_attach(client, bufnr)
       end,
       capabilities = capabilities,
+      init_options = {
+        userLanguages = {
+          elixir = "phoenix-heex",
+          eruby = "erb",
+          heex = "phoenix-heex",
+          svelte = "html",
+        },
+      },
+      settings = {
+        tailwindCSS = {
+          validate = true,
+          experimental = {
+            configFile = vim.loop.cwd() .. "/assets/tailwind.config.js",
+          },
+        },
+      },
+      filetypes = {
+        "css",
+        "scss",
+        "sass",
+        "html",
+        "heex",
+        "elixir",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "svelte",
+      },
     }
   end,
   ["sumneko_lua"] = function()
