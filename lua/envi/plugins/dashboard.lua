@@ -74,20 +74,22 @@ dashboard.preview_file_width = 80
 --   [[         `-.___/   schweeeeeeeeeeeeeeeeeeeeeeee     ]],
 -- }
 
-dashboard.custom_center = {
-  { icon = "  ", desc = "Find File  ", action = "Telescope find_files" },
-  { icon = "  ", desc = "Recents    ", action = "Telescope oldfiles" },
-  { icon = "  ", desc = "Find Word  ", action = "Telescope live_grep" },
-  { icon = "洛 ", desc = "New File   ", action = "DashboardNewFile" },
-}
-dashboard.custom_footer = nil
-
 M.setup = function()
   dashboard.setup {
     theme = "hyper",
-    config = {},
+    config = {
+      week_header = {
+        enable = true,
+      },
+      shortcut = {
+        { desc = "  Find File  ", action = "Telescope find_files", key = "f" },
+        { desc = "  Recents    ", action = "Telescope oldfiles", key = "o" },
+        { desc = "  Find Word  ", action = "Telescope live_grep", key = "/" },
+        { desc = "洛 New File   ", action = "new", key = "n" },
+      },
+    },
     packages = { enable = true },
-    project = false,
+    project = { enable = false },
     mru = {},
   }
 end

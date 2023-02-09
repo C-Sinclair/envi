@@ -182,7 +182,14 @@ return require("packer").startup(function(use)
     "glepnir/lspsaga.nvim",
     branch = "main",
     config = function()
-      require("lspsaga").setup {}
+      require("lspsaga").setup {
+        outline = {
+          keys = {
+            jump = "<enter>",
+            expand_collapse = "<tab>",
+          },
+        },
+      }
     end,
     requires = { { "nvim-tree/nvim-web-devicons" } },
   }
