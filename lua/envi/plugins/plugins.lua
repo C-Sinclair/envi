@@ -111,7 +111,7 @@ return require("packer").startup(function(use)
     config = function()
       require("mason-lspconfig").setup {
         ensure_installed = {
-          "sumneko_lua",
+          "lua_ls",
           "rust_analyzer",
           "bashls",
           "cssls",
@@ -354,6 +354,17 @@ return require("packer").startup(function(use)
     end,
   }
 
+  use {
+    "aaronhallaert/advanced-git-search.nvim",
+    config = function()
+      require("telescope").load_extension "advanced_git_search"
+    end,
+    requires = {
+      "nvim-telescope/telescope.nvim",
+      -- to show diff splits and open commits in browser
+      "tpope/vim-fugitive",
+    },
+  }
   -- time tracking
   use { "wakatime/vim-wakatime" }
 
@@ -572,4 +583,12 @@ return require("packer").startup(function(use)
       require("envi.plugins.yop").setup()
     end,
   }
+
+  --[[ use {
+    "rcarriga/nvim-notify",
+    config = function()
+      -- set notify for other plugins
+      vim.notify = require "notify"
+    end,
+  } ]]
 end)
