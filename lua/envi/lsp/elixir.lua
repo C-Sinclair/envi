@@ -220,7 +220,6 @@ end
 M.setup = function()
   -- shortcuts to hop between file tree
   vim.api.nvim_create_user_command("ElixirNav", M.elixir_nav, {})
-  vim.keymap.set("n", "<leader>tg", M.elixir_nav, {})
   vim.keymap.set("n", "<leader>nt", M.elixir_nav_to_test, {})
   vim.keymap.set("n", "<leader>nv", M.elixir_nav_to_view, {})
   vim.keymap.set("n", "<leader>nl", M.elixir_nav_to_liveview, {})

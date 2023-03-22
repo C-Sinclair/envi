@@ -365,6 +365,9 @@ return require("packer").startup(function(use)
       "tpope/vim-fugitive",
     },
   }
+
+  use { "axkirillov/easypick.nvim", requires = "nvim-telescope/telescope.nvim" }
+
   -- time tracking
   use { "wakatime/vim-wakatime" }
 

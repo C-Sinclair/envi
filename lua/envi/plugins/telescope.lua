@@ -11,6 +11,7 @@ local previewers = require "telescope.previewers"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local exec = require "envi.core.exec"
+local easypick = require "easypick"
 
 local config = {
   defaults = {
@@ -78,7 +79,6 @@ M.setup = function()
   --[[
   Keymaps
   --]]
-
   -- show project files
   vim.keymap.set("n", "<leader>/", function()
     builtin.find_files {}
@@ -127,38 +127,28 @@ M.setup = function()
     builtin.diagnostics()
   end)
 
-  local function pr_files_picker()
-    -- TODO: fix this command so it actually works 💩
-    local results = exec.fish [[-c "wait (gh pr view --json files --jq '.files.[].path')"]]
-    pickers
-      .new({}, {
-        prompt_title = "PR Files",
-        finder = finders.new_table {
-          results = results,
-        },
-        previewer = previewers.new_buffer_previewer {},
-        attach_mappings = function(prompt_bufnr, map)
-          -- on selection
-          actions.select_default:replace(function()
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            local filepath = M.path_from_module(selection.value[2])
-            vim.cmd.e(filepath)
-          end)
-          -- open in a vertical split
-          map("i", "<C-v>", function()
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            local filepath = M.path_from_module(selection.value[2])
-            vim.cmd.vs(filepath)
-          end)
-          return true
-        end,
-      })
-      :find()
-  end
+  local base_branch = exec.git [[ symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@' ]]
 
-  vim.api.nvim_create_user_command("PrFiles", pr_files_picker, {})
+  easypick.setup {
+    pickers = {
+      -- diff current branch with base_branch and show files that changed with respective diffs in preview
+      {
+        name = "changed_files",
+        command = "git diff --name-only $(git merge-base HEAD " .. base_branch .. " )",
+        previewer = easypick.previewers.branch_diff { base_branch = base_branch },
+      },
+
+      -- list files that have conflicts with diffs in preview
+      {
+        name = "conflicts",
+        command = "git diff --name-only --diff-filter=U --relative",
+        previewer = easypick.previewers.file_diff(),
+      },
+    },
+  }
+
+  vim.keymap.set("n", "<leader>tg", "<cmd>Easypick changed_files<cr>")
+  vim.keymap.set("n", "<leader>tc", "<cmd>Easypick conflicts<cr>")
 end
 
 return M
