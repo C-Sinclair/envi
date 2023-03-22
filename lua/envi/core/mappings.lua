@@ -1,7 +1,6 @@
 --[[
-Core VIM keymaps 
+Core VIM keymaps
 --]]
-
 -- yank from current cursor to end of line
 vim.keymap.set("n", "Y", "yg$")
 
@@ -43,7 +42,7 @@ vim.keymap.set("n", "<c-w>N", "<cmd>bprevious<cr>")
 -- centre view on search
 vim.o.lazyredraw = false -- <- needed for the total to increment correctly
 vim.api.nvim_set_keymap("n", "n", "nzzzv", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "N", "nzzzv", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "N", "Nzzzv", { noremap = true, silent = true })
 
 -- setup vim native functions
 vim.cmd [[
