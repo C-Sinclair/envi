@@ -579,4 +579,14 @@ return require("packer").startup(function(use)
       vim.notify = require "notify"
     end,
   } ]]
+  use {
+    "tenxsoydev/karen-yank.nvim",
+    config = function()
+      require("karen-yank").setup {
+        mappings = {
+          disable = { "s", "S" },
+        },
+      }
+    end,
+  }
 end)
