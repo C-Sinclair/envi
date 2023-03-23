@@ -1,4 +1,5 @@
-vim.opt.statuscolumn = '%s%=%l %C%{v:relnum == 0 ? " >" : ""}%#IndentBlankLineChar#%{v:relnum == 0 ? "" : "│"} '
+vim.opt.statuscolumn =
+  '%s%=%{v:relnum == 0 ? v:lnum : v:relnum} %C%{v:relnum == 0 ? "-->" : " "}%#IndentBlankLineChar#%{v:relnum == 0 ? "" : "│ "} '
 
 vim.opt.title = true
 vim.opt.clipboard = "unnamedplus"
