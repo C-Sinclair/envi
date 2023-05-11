@@ -175,6 +175,13 @@ function M.path_from_module(mod)
   return "lib/" .. mod:gsub("%.", "/"):snake_case() .. ".ex"
 end
 
+function M.run_current_test()
+  local full_path = Filepath()
+  local current_line_nr = vim.fn.line "."
+  local tree = vim.treesitter.get_parser(nil, "elixir")
+  tree:parse()
+end
+
 function M.get_all_modules()
   -- TODO: filter out non modules
   local mods = M.get_all_modules_list()

@@ -111,6 +111,7 @@ return require("packer").startup(function(use)
     config = function()
       require("mason-lspconfig").setup {
         ensure_installed = {
+          "astro",
           "lua_ls",
           "rust_analyzer",
           "bashls",
@@ -579,17 +580,16 @@ return require("packer").startup(function(use)
       vim.notify = require "notify"
     end,
   } ]]
-  use {
-    "tenxsoydev/karen-yank.nvim",
-    config = function()
-      require("karen-yank").setup {
-        mappings = {
-          disable = { "s", "S" },
-        },
-      }
-    end,
-  }
-
+  --[[ use { ]]
+  --[[   "tenxsoydev/karen-yank.nvim", ]]
+  --[[   config = function() ]]
+  --[[     require("karen-yank").setup { ]]
+  --[[       mappings = { ]]
+  --[[         disable = { "s", "S" }, ]]
+  --[[       }, ]]
+  --[[     } ]]
+  --[[   end, ]]
+  --[[ } ]]
   use {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -627,4 +627,32 @@ return require("packer").startup(function(use)
       }
     end,
   }
+
+  use {
+    "chrisgrieser/nvim-spider",
+    config = function()
+      local spider = require "spider"
+      spider.setup {}
+
+      vim.keymap.set({ "n", "o", "x" }, "w", function()
+        spider.motion "w"
+      end, { desc = "Spider-w" })
+      vim.keymap.set({ "n", "o", "x" }, "e", function()
+        spider.motion "e"
+      end, { desc = "Spider-e" })
+      vim.keymap.set({ "n", "o", "x" }, "b", function()
+        spider.motion "b"
+      end, { desc = "Spider-b" })
+      vim.keymap.set({ "n", "o", "x" }, "ge", function()
+        spider.motion "ge"
+      end, { desc = "Spider-ge" })
+    end,
+  }
+
+  --[[ use { ]]
+  --[[   "hkupty/iron.nvim", ]]
+  --[[   config = function() ]]
+  --[[     require("envi.plugins.iron").setup() ]]
+  --[[   end, ]]
+  --[[ } ]]
 end)

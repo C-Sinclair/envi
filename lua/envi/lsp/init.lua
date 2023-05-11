@@ -113,7 +113,12 @@ mason.setup_handlers {
   ["elixirls"] = function()
     lspconfig.elixirls.setup {
       cmd = { vim.fn.stdpath "data" .. "/mason/bin/elixir-ls" },
-      on_attach = on_attach,
+      on_attach = function(client, bufnr)
+        local null_ls = require "envi.plugins.null-ls"
+        null_ls.prepare_format_on_save(bufnr)
+
+        on_attach(client, bufnr)
+      end,
       capabilities = capabilities,
     }
   end,
@@ -180,6 +185,16 @@ mason.setup_handlers {
           },
         },
       },
+    }
+  end,
+  ["astro"] = function()
+    lspconfig.astro.setup {
+      on_attach = function(client, bufnr)
+        local null_ls = require "envi.plugins.null-ls"
+        null_ls.prepare_format_on_save(bufnr)
+        return on_attach(client, bufnr)
+      end,
+      capabilities = capabilities,
     }
   end,
 }
