@@ -127,48 +127,25 @@ return require("packer").startup(function(use)
           "tailwindcss",
           "teal_ls",
           "zls",
+          "svelte",
         },
       }
     end,
   }
+
   use {
     "jay-babu/mason-null-ls.nvim",
     requires = {
       "williamboman/mason.nvim",
       "jose-elias-alvarez/null-ls.nvim",
     },
-    config = function()
-      require("mason-null-ls").setup {
-        ensure_installed = {
-          "jsonlint",
-          "rustywind",
-          "black",
-          "flake8",
-          "stylua",
-          "luacheck",
-          "cljstyle",
-          "fnlfmt",
-          "gofmt",
-          "markdownlint",
-          "prismaFmt",
-          "rustfmt",
-          "stylish_haskell",
-          "zsh",
-          "beautyzsh",
-          "fish",
-          "fish_indent",
-          "actionlint",
-          "credo",
-          "curlylint",
-          "djhtml",
-          "jq",
-        },
-      }
-    end,
+    config = function() end,
   }
 
   -- lsp stuff
   use "neovim/nvim-lspconfig"
+
+  use { "elixir-tools/elixir-tools.nvim", requires = { "nvim-lua/plenary.nvim" } }
 
   -- formatting
   use {

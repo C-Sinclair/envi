@@ -92,6 +92,33 @@ M.setup = function()
       end
     end,
   }
+
+  require("mason-null-ls").setup {
+    ensure_installed = {
+      "jsonlint",
+      "rustywind",
+      "black",
+      "flake8",
+      "stylua",
+      "luacheck",
+      "cljstyle",
+      "fnlfmt",
+      "gofmt",
+      "markdownlint",
+      "prismaFmt",
+      "rustfmt",
+      "stylish_haskell",
+      "zsh",
+      "beautyzsh",
+      "fish",
+      "fish_indent",
+      "actionlint",
+      "credo",
+      "curlylint",
+      "djhtml",
+      "jq",
+    },
+  }
 end
 
 return M

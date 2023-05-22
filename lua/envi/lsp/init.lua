@@ -114,15 +114,27 @@ local mason = require "mason-lspconfig"
 mason.setup_handlers {
   default_handler,
   ["elixirls"] = function()
-    lspconfig.elixirls.setup {
-      cmd = { vim.fn.stdpath "data" .. "/mason/bin/elixir-ls" },
-      on_attach = function(client, bufnr)
-        local null_ls = require "envi.plugins.null-ls"
-        null_ls.prepare_format_on_save(bufnr)
+    local elixir = require "elixir"
+    local elixirls = require "elixir.elixirls"
 
-        on_attach(client, bufnr)
-      end,
-      capabilities = capabilities,
+    elixir.setup {
+      elixirls = {
+        repo = "elixir-lsp/elixir-ls",
+        tag = "v0.14.6",
+        settings = elixirls.settings {
+          dialyzerEnabled = true,
+          fetchDeps = true,
+          enableTestLenses = true,
+          suggestSpecs = true,
+        },
+        on_attach = function(client, bufnr)
+          local null_ls = require "envi.plugins.null-ls"
+          null_ls.prepare_format_on_save(bufnr)
+
+          on_attach(client, bufnr)
+        end,
+        capabilities = capabilities,
+      },
     }
   end,
   ["tsserver"] = function()
