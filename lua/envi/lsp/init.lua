@@ -88,6 +88,9 @@ vim.keymap.set("n", "<leader>cr", vim.lsp.codelens.run, {
   buffer = true,
   noremap = true,
 })
+vim.keymap.set("i", "<C-h>", function()
+  vim.lsp.buf.signature_help()
+end)
 
 -- Open Diagnostics
 vim.keymap.set("n", "<leader>de", "<cmd>Lspsaga show_cursor_diagnostics ++unfocus<CR>")
