@@ -288,16 +288,6 @@ return require("packer").startup(function(use)
     end,
   }
 
-  -- starting dashboard
-  use {
-    "glepnir/dashboard-nvim",
-    event = "VimEnter",
-    config = function()
-      require("envi.plugins.dashboard").setup()
-    end,
-    requires = { "nvim-tree/nvim-web-devicons" },
-  }
-
   -- comments
   use {
     "numToStr/Comment.nvim",
